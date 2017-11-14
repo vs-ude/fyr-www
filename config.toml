@@ -13,9 +13,9 @@ home = [ "HTML", "RSS", "JSON"]
   # See the config.toml file from this documentation site to have an example.
   editURL = ""
   # Author of the site, will be used in meta information
-  author = ""
+  author = "Torben Weis"
   # Description of the site, will be used in meta information
-  description = ""
+  description = "Documentation of the Fyr Programming Language"
   # Shows a checkmark for visited pages on the menu
   showVisitedLinks = false
   # Disable search function. It will hide search bar

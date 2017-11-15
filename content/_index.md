@@ -8,7 +8,7 @@ Using _C_ as output, Fyr code can even run efficiently on small embedded devices
 
 Fyr is designed to implement all tiers of **distributed IoT applications**, i.e. embedded devices, server-side code and of course the Web UI. 
 
-## Design Rational
+## Design Rationale
 
 Todays application programming languages like _GO_ , _Java_, _Swift_ etc. work well on desktop, servers and mobile devices, but all attempts of porting them to either Web browsers or small IoT devices are challenging, because they require a complex run-time system that is supposed to run on a machine with plenty of resources.
 Compiling such code to WebAssembly or JavaScript inadvertantly leads to huge binaries, resulting in poor page loading times and high resource usage on the client.

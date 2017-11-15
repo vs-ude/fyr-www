@@ -6,7 +6,7 @@ Fyr is a compiled language with static type checking, a lean memory footprint, a
 Thus, WebAssembly allows Fyr code to run on desktop, server and mobile devices.
 Using _C_ as output, Fyr code can even run efficiently on small embedded devices. 
 
-Fyr is designed to implement all tiers of **modern distributed IoT applications**, i.e. embedded devices, server-side code and of course the Web UI. 
+Fyr is designed to implement all tiers of **distributed IoT applications**, i.e. embedded devices, server-side code and of course the Web UI. 
 
 ## Design Rational
 

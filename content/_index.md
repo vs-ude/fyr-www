@@ -1,6 +1,6 @@
 # Fyr
 
-Fyr is a **scalable application programming language** running in Web Browsers (as [WebAssembly](http;//webassembly.org)), on the desktop and servers (native or inside _Node.JS_), and on simple Arduino-like IoT-devices.
+Fyr is a **scalable application programming language** running in Web Browsers (as [WebAssembly](http://webassembly.org)), on the desktop and servers (native or inside _Node.JS_), and on simple Arduino-like IoT-devices.
 
 Fyr is a compiled language with static type checking, a lean memory footprint, and generates high-performance code. Fyr currently compiles to _WebAssemlby_ and _C99_ code. WebAssembly is supported by _Chrome_, _Firefox_, _Safari_, _Edge_, _Node.JS_ and more.
 Thus, WebAssembly allows Fyr code to run on desktop, server and mobile devices.
@@ -21,7 +21,7 @@ The design goal of Fyr is therefore to produce **small binaries** (comparable to
 
 ## Project Status
 
-Fyr is a research project of the [_Distributed Systems_](http://www.vs.uni-due.de) research group at the [_University Duisburg Essen_](http://www.vs.uni-due.de).
+Fyr is a research project of the [_Distributed Systems_](http://www.vs.uni-due.de) research group at the [_University Duisburg Essen_](http://www.uni-due.de).
 Fyr is still in alpha status.
 The Fyr compiler for WebAssembly is working, although not all planned features are imlemented yet.
 The C99 backend is working for a subset of the language, but is not as complete as WebAssembly support.

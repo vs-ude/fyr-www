@@ -53,7 +53,7 @@ If a variable is not explicitly initialized, Fyr ensures that the data type is i
 Fyr does not perform any implicit type conversion.
 Explicit casts are required as in the following example:
 
-```
+```go
 var x int32 = 42
 var y int16 = <int32>x
 ```
@@ -237,6 +237,51 @@ Both may be removed in future versions of the language.
 
 ### Tuple Type
 
+A tuple type is an anonymous struct.
+
+```go
+var result (string, bool) = (null, false)
+```
+
+In the above example `(string, bool)` is a tuple type.
+The expression `(null, false)` is a literal that is assignable to a tuple.
+
+The main use case of tuples is complex return values.
+
+```go
+function lookup(name string) (string, bool) {
+    ...
+}
+``` 
+
+The above function returns a tuple and could thus be assigned to the `result` variable.
+
+```go
+result = lookup("foobar")
+```
+
+Furthermore, tuples returns by a function can be decomposed upon assignment.
+
+```go
+var id, ok = lookup("foobar")
+```
+
+Tuples can be used in other cases as well, but structs are often easier to use.
+The advantage of tuples is that they are anonymous.
+If every function returning a tuple would use a struct instead, the code would be cluttered with structs.
+
+```go
+type lookupResult struct {
+    id string
+    ok bool
+}
+
+function lookup(name string) lookupResult {
+}
+```
+
+In the above case tuples are easier to use.
+
 ### Or Type
 
 ### Map Type
@@ -244,6 +289,10 @@ Both may be removed in future versions of the language.
 ### Struct Type
 
 ### Pointer Type
+
+### References
+
+### Const
 
 ## Functions
 
@@ -278,9 +327,5 @@ Both may be removed in future versions of the language.
 ### Template Functions
 
 ## Advanced Topics
-
-### Const
-
-### References
 
 ### Unsafe Pointers

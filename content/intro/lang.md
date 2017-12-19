@@ -284,13 +284,89 @@ In the above case tuples are easier to use.
 
 ### Or Type
 
-### Map Type
+An Or Type is a disjunction of types.
+A value of an Or Type must match one of these types.
 
-### Struct Type
+```go
+var v string | bool = false
+v = "Hello"
+```
+
+Values of an Or Type are realized as `interface{}` (see the chapter Interfaces), but the compiler knows that this `interface{}` can only hold one of the specified types, whereas an `interface{}` can hold any type.
+Using the `is` keyword, we can test the type of the value being stored in the Or Type.
+
+```go
+var v string | bool = false
+if (v is string) {
+    ...
+}
+v = "Hello"
+if (v is bool) {
+    ...
+}
+```
+
+A value can be extracted using a cast operation.
+If the Or Type stores a different value, the program will panic.
+
+```go
+var v string | bool = "Joe"
+var name = <string>v
+```
+
+Or types can be used together with string literal types to construct enumerations.
+For example, we can define a type to store a person's gender.
+
+```go
+type Gender "male" | "female" | string
+var g Gender = "male"
+if (g is "male") {
+    ...
+}
+g = "female"
+if (g == "female") {
+    ...
+}
+g = "complicated"
+if (g is string) {
+    ...
+}
+```
+
+In the above example `"male"` is a string literal type.
+This is a type that has only one possible value, namely the string constant `"male"`.
+
+Assigning a string value (no string constant!) with the same content, sets g's value to a string type, no matter what the content of the string.
+
+```go
+type Gender "male" | "female" | string
+var s = "male"                              // The type of s is now string
+var g Gender = s                            // The type stored in g is now a string
+if (g is string) {                          // True
+    ...
+}
+if (g is "male") {                          // False
+    ...
+}
+```
+
+Concatenations of Or Types.
+
+Or Types must not contain struct types (but of course pointes to struct types).
+Furthermore, Or Types must not contain arrays.
+The reason is
+
+Default value
+
+### Map Type
 
 ### Pointer Type
 
+### Struct Type
+
 ### References
+
+### Interfaces
 
 ### Const
 

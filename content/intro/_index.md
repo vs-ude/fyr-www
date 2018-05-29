@@ -8,7 +8,7 @@ The quick start guide shows how to download and install Fyr and how to compile a
 
 ## Download
 
-### Step 1
+### Fyr Compiler
 
 Git is required to download the Fyr sources.
 
@@ -19,7 +19,18 @@ Fyr is currently being developed on an internal Git.
 Making Fyr available on GitHub is the next milestone.
 {{% /notice %}}
 
-### Step 2
+### WebAssembly
+
+This step is only required when compiling Fyr to WebAssembly.
+
+The Fyr compiler currently relies on the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt).
+It uses the `wat2wasm` tool to translate `.wat` files into `.wasm` files.
+
+Install the WebAssembly Binary Toolkit and make sure that `wabt` is in your path.
+
+## Install
+
+### Build the Fyr Compiler
 
 The Fyr compiler is written in [TypeScript](http://typescriptlang.org). Install the latest version and make sure that `tsc` is in your path.
 
@@ -41,7 +52,7 @@ npm run build
 
 Running `npm run build:parser` will only generate fresh JavaScript from the `parser.pegjs` parser definition.
 
-### Step 3
+### Setup Environment Variables
 
 Now set the path to the fyr directory like this:
 
@@ -51,27 +62,27 @@ export FYRPATH=/your/path/to/fyr
 
 Fyr will use this path to find its library files.
 
-Add the directory `FYRPATH/bin` to your path so that `fyrc` and `runwasm` are in your path.
+Add the directory `$FYRPATH/bin` to your path so that `fyrc` and `runwasm` are in your path.
 
-### Step 4
-
-The Fyr compiler currently relies on the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt).
-It uses the `wat2wasm` tool to translate `.wat` files into `.wasm` files.
-
-Install the WebAssembly Binary Toolkit and make sure that `wabt` is in your path.
-
-## Running the compiler
+## Compile and Run
 
 Use `fyrc` to compile `.fyr` files.
-By default, the compiler emits `.wasm` files.
+The following example compiler a fyr source file into a C file.
 
 ```bash
-fyrc measurements/mandel_fyr/mandelbrot.fyr
+fyrc -c -T example.fyr
 ```
 
-The output of the above command is `mandelbrot.wasm` in the same directory.
+The output of the above command is `example.c` in the same directory.
+A C compiler (for example gcc) is required to generate an executable.
 
-## Running the generated code
+```bash
+gcc -O3 -c example.c fyr.c
+gcc -o example example.o fyr.o
+./example
+``` 
+
+### Running WebAssembly Code
 
 Some examples come with an HTML page.
 Make it available for example with `python -m SimpleHTTPServer 8000` and open the HTML page.

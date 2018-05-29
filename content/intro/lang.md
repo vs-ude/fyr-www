@@ -30,25 +30,30 @@ Future versions of the language might remove `;` entirely.
 Fyr supports the following data types:
 
 ```go
-uint8, uint16, uint32, uint64
-int8, int16, int32, int64
-float, double
-byte                            // An alias for uint8
-bool                            // false or true
-string                          // Strings are immutable
+uint8, uint16, uint32, uint64   // Unsigned integers of fixed size
+int8, int16, int32, int64       // Signed integers of fixed size
+float, double                   // 32bit and 64bit floating point numbers
+byte                            // Platform dependend
+                                // Smallest addressable unit, usually 8 bits
+bool                            // A bolean that is false or true
+string                          // Immutable UTF-8 strings
 rune                            // A 32-bit unicode character
-int                             // An alias for int32
-uint                            // An alias for uint32
+int                             // Platform dependend
+uint                            // Platform dependend
 ```
 
-Since WebAssembly does use a 32-bit address space by default, Fyr treats `int` as an alias for `int32`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int64`.
+WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int64`.
 
 {{% notice note %}}
 The types `float` and `double` might be renamed to `float32` and `float64` in a future version of the language.
 {{% /notice %}}
 
+{{% notice note %}}
+`int`, `uint` and `byte` might become independent types, so that casting between these platform dependent types and types of fixed size might require an explicit cast. Currently it is platform specific whether a cast is required or not.
+{{% /notice %}}
+
 All data types have a default value of 0.
-If a variable is not explicitly initialized, Fyr ensures that the data type is initialized with zeros.
+If a value is not explicitly initialized, Fyr ensures that it is initialized with zeros.
 
 Fyr does not perform any implicit type conversion.
 Explicit casts are required as in the following example:
@@ -75,22 +80,22 @@ Strings are stored as pointers to string data.
 Hence, string assignment is very fast.
 String comparison, however, compares the value of the strings these internal pointers are pointing at.
 
-The index operator `[index]` returns bytes of this UTF-8 encoding.
+The index operator `[index]` returns bytes of the UTF-8 encoding.
 
 To obtain the byte count of a string, call its `len()` member function.
 To access the single unicode characters (of type `rune`) encoded in the UTF-8 string, a `for` loop can be used.
 
 ```go
-func print(i int, r rune) {
+func print(let i int, r rune) {
     ...
 }
 
 export func main() int {
     var str = "Übung"
-    for(var i, r in str) {
+    for(let i, r in str) {
         print(i, r)         // Loops 5 times
     }
-    return str.len()       // Returns 6
+    return str.len()        // Returns 6
 }
 ```
 
@@ -125,18 +130,20 @@ var arr []byte = <[]byte>"Hallo"
 var str string = <string>arr
 ```
 
-Note that this conversion implies a copy because strings are immutable and arrays are not.
+Note that this conversion implies a copy because strings are immutable and slices are not.
+
+### Pointer Type
 
 ### Arrays and Slices
 
 Arrays are value types of fixed length.
 Assigning one array to another results in a copy of this array.
-When accessing an array, Fyr checks that the index if within the bounds of the array.
+When accessing an array, Fyr checks that the index is within the bounds of the array.
 An out-of-bound index causes the application to abort.
 
 ```go
 func search(arr [4]int, val int) int {
-    for(var i, v in arr) {
+    for(let i, v in arr) {
         if (v == val) {
             return i
         }
@@ -152,8 +159,8 @@ export func main() int {
 }
 ```
 
-Note, that arrays (like all other data types) are initialized with zero.
-Only the first two elements are set to a non-zero value.
+Note that arrays (like all other data types) are initialized with zero.
+In the above example, only the first two elements are set to a non-zero value.
 
 In the above example, the array is copied when `search` is called.
 This is inefficient, and the search function works only for arrays of a fixed size.
@@ -161,7 +168,7 @@ Therefore, Fyr supports slices, which are essentially pointers to an underlying 
 
 ```go
 func search(arr &[]int, val int) int {
-    for(var i, v in arr) {
+    for(let i, v in arr) {
         if (v == val) {
             return i
         }
@@ -174,20 +181,21 @@ export func main() int {
     return search(arr[:], 234)
 }
 ```
+
 The above example uses an array initialization, which is just a shortcut to populate an array.
 
 The slice operator `[:]` creates a slice which points to the underlying array and contains all elements of `arr`.
 For example, `[2:]` would include all elements of the array starting by the array element at position 2.
 
-An access to a slice checks tha the index is within the bounds of the slice.
+An access to a slice checks that the index is within the bounds of the slice.
 Out-of-bound access aborts the application.
 
-A slice is denoted as `[]int`.
+A slice is denoted as in `[]int`.
 Note that slices are pointers to an array.
 Assigning one slice to another just assigns this internal pointer, but the array is not copied.
 
-However, in this example the search function accepts a reference slice of type `&[]int`.
-When a function accepts a reference type as a parameter, the compiler verifies that the function will not store any pointers to this data that live longer than the function invocation.
+However, in this example the search function accepts a local reference slice of type `&[]int`.
+When a function accepts a local reference type as a parameter, the compiler verifies that the function will not store any pointers to this data that live longer than the function invocation.
 This allows `main` to hand out a slice to an array which is on the stack, because Fyr can verify that no pointers to `arr` live longer than the stack frame in which `arr` is stored.
 
 If `search` accepts `[]int` instead, `main` must allocate the array on the heap, because otherwise Fyr cannot ensure that there are no dangling pointers to the array after main returns.
@@ -195,7 +203,7 @@ Like _GO_, Fyr features pointers and is memory safe.
 
 ```go
 func search(arr []int, val int) int {
-    for(var i, v in arr) {
+    for(let i, v in arr) {
         if (v == val) {
             return i
         }
@@ -212,13 +220,12 @@ export func main() int {
 In the above example, `[123, ...]` allocates the array on the heap and returns a slice to it.
 Hence, `arr` is now a slice type.
 In addition, an array initializer is used to populate the array.
-Arrays allocated on the heap are subject to garbage collection.
 
 Due to type inference, the following two statements are equivalent:
 
 ```go
 var arr []int = [123, 234, 345, 456]
-var arr [123, 234, 345, 456]
+var arr = [123, 234, 345, 456]
 ```
 
 {{% notice warning %}}
@@ -260,7 +267,7 @@ The above function returns a tuple and could thus be assigned to the `result` va
 result = lookup("foobar")
 ```
 
-Furthermore, tuples returns by a function can be decomposed upon assignment.
+Furthermore, tuples returned by a function can be decomposed upon assignment.
 
 ```go
 var id, ok = lookup("foobar")
@@ -293,15 +300,15 @@ v = "Hello"
 ```
 
 Values of an Or Type are realized as `interface{}` (see the chapter Interfaces), but the compiler knows that this `interface{}` can only hold one of the specified types, whereas an `interface{}` can hold any type.
-Using the `is` keyword, we can test the type of the value being stored in the Or Type.
+Using the `is` keyword, we can test the type of value being stored in the Or Type.
 
 ```go
 var v string | bool = false
-if (v is string) {
+if (v is bool) {
     ...
 }
 v = "Hello"
-if (v is bool) {
+if (v is string) {
     ...
 }
 ```
@@ -350,21 +357,32 @@ if (g is "male") {                          // False
 }
 ```
 
-Concatenations of Or Types.
-
-Or Types must not contain struct types (but of course pointes to struct types).
+Or Types must not contain struct types (but of course they can contain pointers to struct types).
 Furthermore, Or Types must not contain arrays.
-The reason is
 
-Default value
+{{% notice warning %}}
+The above limitation might be removed.
+{{% /notice %}}
 
-### Map Type
+The default value of an Or Type is the default value of its first type option.
+In the case of 
 
-### Pointer Type
+```go
+type Gender "male" | "female" | string
+
+type Person struct {
+    name   string
+    gender Gender
+}
+
+var p Person = {name: "Joe"}
+```
+
+the field `gender` is not explicitly initialized and therefore defaults go `"male"`, because the string literal `"male"` is the first type option on `Gender`.
 
 ### Struct Type
 
-### References
+### Map Type
 
 ### Interfaces
 

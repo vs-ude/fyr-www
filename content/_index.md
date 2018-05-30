@@ -1,12 +1,19 @@
 # Fyr
 
-Fyr is a **scalable application programming language** running in Web Browsers (as [WebAssembly](http://webassembly.org)), on the desktop and servers (native or inside _Node.JS_), and on simple Arduino-like IoT-devices.
+Fyr is a **modern systems programming language** that combines the versatility of C with the ease and safety of application programming languages like _Java_, _Go_ or _TypeScript_.
+Like C/C++, Fyr can be used for low-level hardware-oriented programming and high-level application programming.
+In contrast to C, the Fyr compiler guarantees **memory safety and thread safety** at compilation time.
 
-Fyr is a compiled language with static type checking, a lean memory footprint, and generates high-performance code. Fyr currently compiles to _WebAssemlby_ and _C99_ code. WebAssembly is supported by _Chrome_, _Firefox_, _Safari_, _Edge_, _Node.JS_ and more.
+As a systems programming language, Fyr targets all computing platforms.
+Currently the Fyr compiler generates code running in Web Browsers (as [WebAssembly](http://webassembly.org)), on desktop and servers (native or inside _Node.JS_), and on simple IoT-devices like Arduino Uno or ESP32.
+
+Fyr is a compiled language with static type checking, a lean memory footprint, and generates high-performance code. Fyr currently compiles to _WebAssembly_ and _C99_ code.
+WebAssembly is supported by all modern browsers like _Chrome_, _Firefox_, _Safari_, _Edge_, and _Node.JS_.
 Thus, WebAssembly allows Fyr code to run on desktop, server and mobile devices.
-Using _C_ as output, Fyr code can even run efficiently on small embedded devices. 
+Using _C99_ as output, Fyr code can even run efficiently on small embedded devices.
 
-Fyr is designed to implement all tiers of **distributed IoT applications**, i.e. embedded devices, server-side code and of course the Web UI. 
+Fyr is designed to implement all tiers of **distributed IoT applications**, i.e. embedded devices, server-side code and the Web UI. 
+Furthermore, it can be combined with existing _C_ and _JavaScript_ code.
 
 ## Design Rationale
 

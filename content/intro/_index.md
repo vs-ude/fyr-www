@@ -57,12 +57,12 @@ Running `npm run build:parser` will only generate fresh JavaScript from the `par
 Now set the path to the fyr directory like this:
 
 ```bash
-export FYRPATH=/your/path/to/fyr
+export FYRBASE=/your/path/to/fyr
 ```
 
 Fyr will use this path to find its library files.
 
-Add the directory `$FYRPATH/bin` to your path so that `fyrc` and `runwasm` are in your path.
+Add the directory `$FYRBASE/bin` to your path so that `fyrc` and `runwasm` are in your path.
 
 ## Compile and Run
 

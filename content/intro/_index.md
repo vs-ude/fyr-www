@@ -28,13 +28,24 @@ It uses the `wat2wasm` tool to translate `.wat` files into `.wasm` files.
 
 Install the WebAssembly Binary Toolkit and make sure that `wabt` is in your path.
 
+### C Compiler
+
+Fyr uses a C compiler to generate native applications.
+By default, Fyr uses `gcc`, which must be installed.
+
+{{% notice note %}}
+Support for `clang` or `avr-gcc` will follow.
+{{% /notice %}}
+
 ## Install
 
 ### Build the Fyr Compiler
 
-The Fyr compiler is written in [TypeScript](http://typescriptlang.org). Install the latest version and make sure that `tsc` is in your path.
+The Fyr compiler is written in [TypeScript](http://typescriptlang.org).
+Install the latest version and make sure that `tsc` is in your path.
 
-To execute the Fyr compiler, install the latest version of [Node.js](https://nodejs.org/en/). Make sure that `node` is in your path.
+To execute the Fyr compiler, install the latest version of [Node.js](https://nodejs.org/en/).
+Make sure that `node` is in your path.
 
 Fyr uses [NPM](https://www.npmjs.com/package/npm) to download required packages. Make sure that `npm` is in your path.
 
@@ -51,10 +62,11 @@ npm run build
 ```
 
 Running `npm run build:parser` will only generate fresh JavaScript from the `parser.pegjs` parser definition.
+Running `npm run build:lib` re-compiles the minimal native Fyr runtime.
 
 ### Setup Environment Variables
 
-Now set the path to the fyr directory like this:
+Now set the path to the fyr installation directory like this:
 
 ```bash
 export FYRBASE=/your/path/to/fyr
@@ -63,6 +75,12 @@ export FYRBASE=/your/path/to/fyr
 Fyr will use this path to find its library files.
 
 Add the directory `$FYRBASE/bin` to your path so that `fyrc` and `runwasm` are in your path.
+The directory `$FYRBASE/src` contains packages of the Fyr standard library.
+
+Set `$FYRPATH` to a directry that contains your personal sources in `$FYRPATH/src`.
+If `$FYRPATH` is not set, it defaults to `$HOME/fyr`.
+Optionally `$FYRPATH` can contain multiple pathes separated by colon.
+Make sure to put `$FYRPATH/bin` in your path, because this is the location where the compiled programs are put.
 
 ## Compile and Run
 

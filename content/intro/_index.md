@@ -64,6 +64,13 @@ npm run build
 Running `npm run build:parser` will only generate fresh JavaScript from the `parser.pegjs` parser definition.
 Running `npm run build:lib` re-compiles the minimal native Fyr runtime.
 
+### Determine the Architecture
+
+Fyr is designed for cross compilation.
+Therefore, paths to object files or executables have a architecture-specific subdirectory.
+Use the `fyrarch` command to get the default architecture.
+In the following we refer to `<architecture>` which must be set to the output of `fyrarch` unless cross compiling for another architecture.
+
 ### Setup Environment Variables
 
 Now set the path to the fyr installation directory like this:
@@ -80,7 +87,7 @@ The directory `$FYRBASE/src` contains packages of the Fyr standard library.
 Set `$FYRPATH` to a directry that contains your personal sources in `$FYRPATH/src`.
 If `$FYRPATH` is not set, it defaults to `$HOME/fyr`.
 Optionally `$FYRPATH` can contain multiple pathes separated by colon.
-Make sure to put `$FYRPATH/bin` in your path, because this is the location where the compiled programs are put.
+Make sure to put `$FYRPATH/bin/<architecture>` in your path, because this is the location where the compiled programs are put.
 
 ## Compile and Run
 

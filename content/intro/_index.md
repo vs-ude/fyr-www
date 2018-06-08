@@ -88,17 +88,20 @@ Use `fyrc` to compile `.fyr` files.
 The following example compiler a fyr source file into a C file.
 
 ```bash
-fyrc -c -T example.fyr
+fyrc -c example.fyr
 ```
 
 The output of the above command is `example.c` in the same directory.
-A C compiler (for example gcc) is required to generate an executable.
+Furthermore, the C-files are compiled and linked resuting in `example`.
+
+To compile a package (i.e. all `.fyr` files in a directory`, go to the sources directory of the package and run
 
 ```bash
-gcc -O3 -c example.c fyr.c
-gcc -o example example.o fyr.o
-./example
-``` 
+fyrc -c .
+```
+
+If the package is in the sources path of `$FYRBASE` or `$FYRPATH`, the object files are put to `pkg/<architecture>` in the respective path, and executables are put to `bin/<architecture>`.
+This is preferable, since it does not clutter the source files with generated files.
 
 ### Running WebAssembly Code
 

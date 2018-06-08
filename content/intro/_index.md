@@ -91,8 +91,12 @@ Make sure to put `$FYRPATH/bin/<architecture>` in your path, because this is the
 
 ## Compile and Run
 
-Use `fyrc` to compile `.fyr` files.
-The following example compiler a fyr source file into a C file.
+Use `fyrc` to compile `.fyr` files and build executables.
+
+### Compiling C-Code
+
+The following example compiles a fyr source file into a C file.
+The flag `-c` selects C as a compiler backend.
 
 ```bash
 fyrc -c example.fyr
@@ -109,6 +113,8 @@ fyrc -c .
 
 If the package is in the sources path of `$FYRBASE` or `$FYRPATH`, the object files are put to `pkg/<architecture>` in the respective path, and executables are put to `bin/<architecture>`.
 This is preferable, since it does not clutter the source files with generated files.
+
+### Compiling WebAssembly Code
 
 ### Running WebAssembly Code
 

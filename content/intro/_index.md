@@ -8,6 +8,18 @@ The quick start guide shows how to download and install Fyr and how to compile a
 
 ## Download
 
+The Fyr compiler relies on some external tools.
+This guide shows how to install the Fyr compiler and all tools including a C-compiler and WebAssembly tools.
+If you do not want to generate C-code or WebAssembly, the respective steps and be left out.
+
+### NodeJS
+
+Install NodeJS version 9.2 or newer.
+
+### Typescript
+
+Install TypeSecipt version 2.8.0 or newer.
+
 ### Fyr Compiler
 
 Git is required to download the Fyr sources.
@@ -38,6 +50,8 @@ Support for `clang` or `avr-gcc` will follow.
 {{% /notice %}}
 
 ## Install
+
+This step shows how to compiler ot Fyr compiler and how to setup environment variables etc.
 
 ### Build the Fyr Compiler
 
@@ -91,6 +105,7 @@ Make sure to put `$FYRPATH/bin/<architecture>` in your path, because this is the
 
 ## Compile and Run
 
+This step shows how to run the compiler.
 Use `fyrc` to compile `.fyr` files and build executables.
 
 ### Compiling C-Code
@@ -115,6 +130,12 @@ If the package is in the sources path of `$FYRBASE` or `$FYRPATH`, the object fi
 This is preferable, since it does not clutter the source files with generated files.
 
 ### Compiling WebAssembly Code
+
+The same as compiling C-code, just use the `-w` option instead of `-c`, e.g.
+
+```bash
+fyrc -w .
+```
 
 ### Running WebAssembly Code
 

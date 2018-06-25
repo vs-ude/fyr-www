@@ -342,7 +342,7 @@ if (g is string) {
 In the above example `"male"` is a symbol.
 A symbol is a type that has only one possible value, namely the string literal `"male"`.
 Internally, a symbol is not necessarily stored as a string.
-The compiler may opt to enumerate the symbols and store a number internally insteaf of a string to represent a symbol.
+The compiler may opt to enumerate the symbols and store a number internally instead of a string to represent a symbol.
 
 Assigning a string value (not string literal!) with the same content, sets `g's` value to a string type, no matter what the content of the string.
 

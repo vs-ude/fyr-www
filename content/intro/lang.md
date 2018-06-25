@@ -256,7 +256,7 @@ The expression `(null, false)` is a literal that is assignable to a tuple.
 The main use case of tuples is complex return values.
 
 ```go
-function lookup(name string) (string, bool) {
+func lookup(name string) (string, bool) {
     ...
 }
 ``` 
@@ -283,7 +283,7 @@ type lookupResult struct {
     ok bool
 }
 
-function lookup(name string) lookupResult {
+func lookup(name string) lookupResult {
 }
 ```
 
@@ -382,13 +382,17 @@ the field `gender` is not explicitly initialized and therefore defaults go `"mal
 
 ### Const
 
+### Typecasts
+
 ## Functions
 
 ### Function Type
 
-### Lambda Functions
-
 ### Member Functions
+
+### Closures
+
+### Function Pointer
 
 ## Interfaces
 

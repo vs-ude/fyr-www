@@ -35,7 +35,7 @@ int8, int16, int32, int64       // Signed integers of fixed size
 float, double                   // 32bit and 64bit floating point numbers
 byte                            // Platform dependend
                                 // Smallest addressable unit, usually 8 bits
-bool                            // A bolean that is false or true
+bool                            // A boolean that is false or true
 string                          // Immutable UTF-8 strings
 rune                            // A 32-bit unicode character
 int                             // Platform dependend
@@ -270,12 +270,12 @@ result = lookup("foobar")
 Furthermore, tuples returned by a function can be decomposed upon assignment.
 
 ```go
-var id, ok = lookup("foobar")
+id, ok = lookup("foobar")
 ```
 
 Tuples can be used in other cases as well, but structs are often easier to use.
 The advantage of tuples is that they are anonymous.
-If every function returning a tuple would use a struct instead, the code would be cluttered with structs.
+If every function returning a tuple uses a struct instead, the code would be cluttered with structs.
 
 ```go
 type lookupResult struct {
@@ -289,18 +289,17 @@ function lookup(name string) lookupResult {
 
 In the above case tuples are easier to use.
 
-### Or Type
+### Or-Type and Symbols
 
-An Or Type is a disjunction of types.
-A value of an Or Type must match one of these types.
+An Or-Type is a union of types with a discriminator.
+A value of an Or-Type must match one of these types and the discriminator stores which type that is.
 
 ```go
 var v string | bool = false
 v = "Hello"
 ```
 
-Values of an Or Type are realized as `interface{}` (see the chapter Interfaces), but the compiler knows that this `interface{}` can only hold one of the specified types, whereas an `interface{}` can hold any type.
-Using the `is` keyword, we can test the type of value being stored in the Or Type.
+Using the `is` keyword, we can test the type of value being stored in the Or-Type.
 
 ```go
 var v string | bool = false
@@ -314,14 +313,14 @@ if (v is string) {
 ```
 
 A value can be extracted using a cast operation.
-If the Or Type stores a different value, the program will panic.
+If the Or-Type stores a different value, the program will panic.
 
 ```go
 var v string | bool = "Joe"
 var name = <string>v
 ```
 
-Or types can be used together with string literal types to construct enumerations.
+Or types can be used together with symbols to construct enumerations.
 For example, we can define a type to store a person's gender.
 
 ```go
@@ -340,10 +339,12 @@ if (g is string) {
 }
 ```
 
-In the above example `"male"` is a string literal type.
-This is a type that has only one possible value, namely the string constant `"male"`.
+In the above example `"male"` is a symbol.
+A symbol is a type that has only one possible value, namely the string literal `"male"`.
+Internally, a symbol is not necessarily stored as a string.
+The compiler may opt to enumerate the symbols and store a number internally insteaf of a string to represent a symbol.
 
-Assigning a string value (no string constant!) with the same content, sets g's value to a string type, no matter what the content of the string.
+Assigning a string value (not string literal!) with the same content, sets `g's` value to a string type, no matter what the content of the string.
 
 ```go
 type Gender "male" | "female" | string
@@ -357,14 +358,7 @@ if (g is "male") {                          // False
 }
 ```
 
-Or Types must not contain struct types (but of course they can contain pointers to struct types).
-Furthermore, Or Types must not contain arrays.
-
-{{% notice warning %}}
-The above limitation might be removed.
-{{% /notice %}}
-
-The default value of an Or Type is the default value of its first type option.
+The default value of an Or-Type is the default value of its first type option.
 In the case of 
 
 ```go
@@ -378,7 +372,7 @@ type Person struct {
 var p Person = {name: "Joe"}
 ```
 
-the field `gender` is not explicitly initialized and therefore defaults go `"male"`, because the string literal `"male"` is the first type option on `Gender`.
+the field `gender` is not explicitly initialized and therefore defaults go `"male"`, because the symbol `"male"` is the first type option on `Gender`.
 
 ### Struct Type
 

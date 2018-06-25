@@ -339,12 +339,13 @@ if (g is string) {
 }
 ```
 
-In the above example `"male"` is a symbol.
-A symbol is a type that has only one possible value, namely the string literal `"male"`.
+In the above example `"male"` is a symbol type.
+Note that is denotes a type and not a string value.
+A symbol is a type that has only one possible value: a string literal of its own name, e.g. `"male"` in the above example.
 Internally, a symbol is not necessarily stored as a string.
-The compiler may opt to enumerate the symbols and store a number internally instead of a string to represent a symbol.
+The compiler may opt to enumerate the symbols and store a number instead.
 
-Assigning a string value (not string literal!) with the same content, sets `g's` value to a string type, no matter what the content of the string.
+Assigning a string value (not string literal!) to the `Gender` type, sets `g's` value to a string type, no matter what the content of the string.
 
 ```go
 type Gender "male" | "female" | string
@@ -372,7 +373,7 @@ type Person struct {
 var p Person = {name: "Joe"}
 ```
 
-the field `gender` is not explicitly initialized and therefore defaults go `"male"`, because the symbol `"male"` is the first type option on `Gender`.
+the field `gender` is not explicitly initialized and therefore defaults to `"male"`, because the symbol type `"male"` is the first type option on `Gender` and `"male"` is the default value of this symbol type.
 
 ### Struct Type
 

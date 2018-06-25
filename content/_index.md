@@ -58,4 +58,4 @@ Since WebAssembly is still in its infancies, performance will be boosted even mo
 Fyr code compiled to C99 and then compiled to native binaries with _gcc_ can be significantly faster than _GO_ and with a smaller memory footprint.
 Performance does of course depend heavily on the benchmark chosen.
 However, initial results indicate that the project goal is reachable.
-Of course, there is a long way to go still, from a research project to a productive programming language.
+Of course, it's still a long way from a research project to a productive programming language.

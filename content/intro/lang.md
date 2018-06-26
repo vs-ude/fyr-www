@@ -217,7 +217,7 @@ export func main() int {
 }
 ```
 
-In the above example, `[123, ...]` allocates the array on the heap and returns a slice to it.
+In the above example, `[123, 234, 345, 456]` allocates the array on the heap and returns a slice to it.
 Hence, `arr` is now a slice type.
 In addition, an array initializer is used to populate the array.
 
@@ -232,7 +232,7 @@ var arr = [123, 234, 345, 456]
 A syntax for allocating arrays of variable size on the heap is not yet defined.
 {{% /notice %}}
 
-The length of a string or slice can be obtained with the `.len()` member function.
+The length of an array, string or slice can be obtained with the built-in `len()` function.
 
 The array range a slice is pointing to can be copied using the `.clone()` function.
 It returns a slice which points to the cloned array.

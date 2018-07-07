@@ -34,12 +34,16 @@ uint8, uint16, uint32, uint64   // Unsigned integers of fixed size
 int8, int16, int32, int64       // Signed integers of fixed size
 float, double                   // 32bit and 64bit floating point numbers
 byte                            // Platform dependend
-                                // Smallest addressable unit, usually 8 bits
-bool                            // A boolean that is false or true
+                                // Smallest addressable unsigned unit, usually 8 bits
+char                            // Platform dependend
+                                // Smallest addressable signed unit, usually 8 bits
+bool                            // A boolean of 8 bits size that is false or true
 string                          // Immutable UTF-8 strings
 rune                            // A 32-bit unicode character
 int                             // Platform dependend
+                                // Signed value, usually 32 bits
 uint                            // Platform dependend
+                                // Signed value, usually 32 bits
 ```
 
 WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int64`.

@@ -389,6 +389,15 @@ the field `gender` is not explicitly initialized and therefore defaults to `"mal
 
 ### Typecasts
 
+### Pure Values
+
+A pure value can be copied byte by byte.
+This is true for for all data-types except pointer-like types.
+Unsafe pointers are pure values, however.
+Pointer-like types can either not be copied, because copying could result in an object having multiple owning pointers, or an object is not destructed when its pointer is overwritten, or reference-counting does not happen correctly in case of reference pointers.
+
+When using the `copy` or `clone` operators, only pure values can be copied or cloned.
+
 ## Functions
 
 ### Function Type
@@ -414,6 +423,40 @@ the field `gender` is not explicitly initialized and therefore defaults to `"mal
 ### For
 
 ## Operators
+
+### cap
+
+The `cap` operator can be applied to all slices.
+It returns the size of the underlying array.
+The type of the return value is `int`.
+
+```go
+let slice = [...100][:5]   // The slice has length 5,
+                            // but the underlying array has the size 100.
+let c = cap(slice)      // c is 100
+```
+### len
+
+The `len` operator can be applied to slices, arrays and strings.
+In the case of strings it returns the size of the string in chars.
+It does not return the number of UTF-8 runes encoded in the string.
+The type of the return value is `int`.
+
+```go
+len("Hello")    // This is 5
+```
+
+### append
+
+### copy
+
+### clone
+
+### sizeof
+
+### alignedSizeof
+
+### take
 
 ### Operator Precedence
 

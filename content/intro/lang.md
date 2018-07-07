@@ -46,14 +46,10 @@ uint                            // Platform dependend
                                 // Signed value, usually 32 bits
 ```
 
-WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int64`.
+WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64`.
 
 {{% notice note %}}
 The types `float` and `double` might be renamed to `float32` and `float64` in a future version of the language.
-{{% /notice %}}
-
-{{% notice note %}}
-`int`, `uint` and `byte` might become independent types, so that casting between these platform dependent types and types of fixed size might require an explicit cast. Currently it is platform specific whether a cast is required or not.
 {{% /notice %}}
 
 All data types have a default value of 0.
@@ -156,7 +152,7 @@ func search(arr [4]int, val int) int {
 }
 
 export func main() int {
-    var arr [4]int
+    let arr [4]int
     arr[0] = 123
     arr[1] = 234
     return search(arr, 234)
@@ -181,7 +177,7 @@ func search(arr &[]int, val int) int {
 }
 
 export func main() int {
-    var arr [4]int = [123, 234, 345, 456]
+    let arr [4]int = [123, 234, 345, 456]
     return search(arr[:], 234)
 }
 ```
@@ -216,7 +212,7 @@ func search(arr []int, val int) int {
 }
 
 export func main() int {
-    var arr []int = [123, 234, 345, 456]
+    let arr []int = [123, 234, 345, 456]
     return search(arr, 234)
 }
 ```
@@ -228,23 +224,23 @@ In addition, an array initializer is used to populate the array.
 Due to type inference, the following two statements are equivalent:
 
 ```go
-var arr []int = [123, 234, 345, 456]
-var arr = [123, 234, 345, 456]
+let arr []int = [123, 234, 345, 456]
+let arr = [123, 234, 345, 456]
 ```
 
-{{% notice warning %}}
-A syntax for allocating arrays of variable size on the heap is not yet defined.
-{{% /notice %}}
+To allocate a slice of variable size, use the `...` operator:
 
-The length of an array, string or slice can be obtained with the built-in `len()` function.
+```go
+let a = 100
+let arr []int = [...a]                          // len 100
+let arr2 []int = [123, 234, 345, 456, ...a]     // len 104
+```
 
-The array range a slice is pointing to can be copied using the `.clone()` function.
+The length of an array, string or slice can be obtained with the `len` operator.
+The length of the array a slice is pointing to can be obtained with the `cap` operator.
+The elements of a slice can be copied using the `clone` operator.
 It returns a slice which points to the cloned array.
-
-{{% notice warning %}}
-A GO-like `.append()` member function is supported on arrays as well as `.cap()`.
-Both may be removed in future versions of the language.
-{{% /notice %}}
+The `append` operator can append to a slice, while `copy` allows copying elements between slices.
 
 ### Tuple Type
 
@@ -424,6 +420,16 @@ When using the `copy` or `clone` operators, only pure values can be copied or cl
 
 ## Operators
 
+### Arithmetic Operators
+
+### Comparison Operators
+
+### Logical Operators
+
+### Reference Operator
+
+The `&` operator creates a local reference pointer for a some data structure.
+
 ### cap
 
 The `cap` operator can be applied to all slices.
@@ -451,6 +457,10 @@ len("Hello")    // This is 5
 ### copy
 
 ### clone
+
+### Slice Expressions
+
+### Index Expressions
 
 ### sizeof
 

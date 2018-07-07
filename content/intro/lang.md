@@ -454,7 +454,29 @@ len("Hello")    // This is 5
 
 ### sizeof
 
+The `sizeof` operator returns the number of bytes required for storing a certain type in memory.
+The type of the return value is `int`.
+
+```go
+sizeof(int64)   // This is 8
+```
+
 ### alignedSizeof
+
+The `alignedSizeof` operator returns the number of bytes required for storing a certain type in an array includeing alignment.
+The returned size is always a multiple of the alignment.
+The type of the return value is `int`.
+
+```go
+type Odd struct {
+    a int64
+    b byte
+}
+
+alignedSizeof(int64)    // This is 8
+alignedSizeof(Odd)      // This is 16, because Odd has a size of 9
+                        // but needs an alignment of 8.
+```
 
 ### take
 

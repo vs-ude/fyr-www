@@ -351,12 +351,12 @@ Assigning a string value (not string literal!) to the `Gender` type, sets `g's` 
 
 ```go
 type Gender "male" | "female" | string
-var s = "male"                              // The type of s is now string
-var g Gender = s                            // The type stored in g is now a string
-if (g is string) {                          // True
+var s = "male"                      // The type of s is now string
+var g Gender = s                    // The type stored in g is now a string
+if (g is string) {                  // True
     ...
 }
-if (g is "male") {                          // False
+if (g is "male") {                  // False
     ...
 }
 ```

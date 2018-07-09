@@ -439,9 +439,9 @@ It returns the size of the underlying array.
 The type of the return value is `int`.
 
 ```go
-let slice = [...100][:5]   // The slice has length 5,
+let slice = [...100][:5]    // The slice has length 5,
                             // but the underlying array has the size 100.
-let c = cap(slice)      // c is 100
+let c = cap(slice)          // c is 100
 ```
 ### len
 

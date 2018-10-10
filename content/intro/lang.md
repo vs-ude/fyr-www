@@ -145,7 +145,7 @@ An out-of-bound index causes the application to abort.
 
 ```go
 func search(arr [4]int, val int) int {
-    for(let i, v in arr) {
+    for(var i, v in arr) {
         if (v == val) {
             return i
         }
@@ -154,15 +154,15 @@ func search(arr [4]int, val int) int {
 }
 
 export func main() int {
-    let arr [4]int
+    var arr [4]int = [...]
     arr[0] = 123
     arr[1] = 234
     return search(arr, 234)
 }
 ```
 
-Note that arrays (like all other data types) are initialized with zero.
-In the above example, only the first two elements are set to a non-zero value.
+Note that variables need explicit initialization before the variable can be used.
+The initialization expression `[...]` initializes an array or slice with its default value, which is zero in this case.
 
 In the above example, the array is copied when `search` is called.
 This is inefficient, and the search function works only for arrays of a fixed size.
@@ -170,7 +170,7 @@ Therefore, Fyr supports slices, which are essentially pointers to an underlying 
 
 ```go
 func search(arr &[]int, val int) int {
-    for(let i, v in arr) {
+    for(var i, v in arr) {
         if (v == val) {
             return i
         }
@@ -179,12 +179,14 @@ func search(arr &[]int, val int) int {
 }
 
 export func main() int {
-    let arr [4]int = [123, 234, 345, 456]
+    var arr [4]int = [123, 234, 345, 456]
     return search(arr[:], 234)
 }
 ```
 
 The above example uses an array initialization, which is just a shortcut to populate an array.
+It is possible to combine this with the default initialization with `[12, 23, ...]`.
+In this case the first two array elements are initialized with `12` and `23` and all remaining elements are initialized with the default value.
 
 The slice operator `[:]` creates a slice which points to the underlying array and contains all elements of `arr`.
 For example, `[2:]` would include all elements of the array starting by the array element at position 2.

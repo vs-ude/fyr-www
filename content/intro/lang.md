@@ -194,7 +194,7 @@ For example, `[2:]` would include all elements of the array starting by the arra
 An access to a slice checks that the index is within the bounds of the slice.
 Out-of-bound access aborts the application.
 
-A slice is denoted as in `[]int`.
+A slice is denoted for example as `[]int`.
 Note that slices are pointers to an array.
 Assigning one slice to another just assigns this internal pointer, but the array is not copied.
 
@@ -203,11 +203,11 @@ When a function accepts a local reference type as a parameter, the compiler veri
 This allows `main` to hand out a slice to an array which is on the stack, because Fyr can verify that no pointers to `arr` live longer than the stack frame in which `arr` is stored.
 
 If `search` accepts `[]int` instead, `main` must allocate the array on the heap, because otherwise Fyr cannot ensure that there are no dangling pointers to the array after main returns.
-Like _GO_, Fyr features pointers and is memory safe.
+Fyr features pointers and is memory safe, i.e. access to free'd memory areas always causes an abort.
 
 ```go
 func search(arr []int, val int) int {
-    for(let i, v in arr) {
+    for(var i, v in arr) {
         if (v == val) {
             return i
         }
@@ -223,8 +223,6 @@ export func main() int {
 
 In the above example, `[123, 234, 345, 456]` allocates the array on the heap and returns a slice to it.
 Hence, `arr` is now a slice type.
-In addition, an array initializer is used to populate the array.
-
 Due to type inference, the following two statements are equivalent:
 
 ```go

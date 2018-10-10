@@ -5,7 +5,7 @@ draft: false
 weight: 10
 ---
 
-The syntax of Fyr is inspired by _GO_, _TypeScript_ and _C++_.
+The syntax of Fyr is mainly inspired by _GO_, and in selected places by _TypeScript_ and _C++_.
 
 ```go
 func main() int {
@@ -48,7 +48,7 @@ uint                            // Platform dependend
                                 // Signed value, usually 32 bits
 ```
 
-WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64`.
+WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64` depending on the target platform.
 
 {{% notice note %}}
 The types `float` and `double` might be renamed to `float32` and `float64` in a future version of the language.

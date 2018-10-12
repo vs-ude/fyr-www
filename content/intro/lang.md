@@ -5,10 +5,19 @@ draft: false
 weight: 10
 ---
 
+Here is the obligatory hello world in Fyr.
+
+```go
+export func main() int {
+    println("Hello World")
+    return 0
+}
+```
+
 The syntax of Fyr is mainly inspired by _GO_, and in selected places by _TypeScript_ and _C++_.
 
 ```go
-func main() int {
+func compute() int {
     var a = 21*2
     return a
 }
@@ -49,6 +58,9 @@ uint                            // Platform dependend
 ```
 
 WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64` depending on the target platform.
+
+The `char` type is required to interface with C functions.
+Idiomatic Fyr code should not use `char` otherwise, since it is a platform-dependent type by definition.
 
 {{% notice note %}}
 The types `float` and `double` might be renamed to `float32` and `float64` in a future version of the language.
@@ -416,11 +428,27 @@ When using the `copy` or `clone` operators, only pure values can be copied or cl
 
 ### Increments
 
-### If
+### if
 
-### For
+### for
 
-## Operators
+### println
+
+`println` is a builtin function that can be used to write debug output.
+The function accepts any number of arguments of any type.
+The behavior of `println` is platform-specific.
+Therefore, it should only be used for debugging, but it should never be part of shipped code.
+
+```go
+println("Hello, two square is", 2 * 2)
+```
+
+`println` uses platform-specifc support libraries to print integers, floats etc.
+It does not use the Fyr standard library.
+When targeting C, `println` will use `printf` internally.
+In the case of WebAssembly it could choose to call `console.log`.
+
+## Operators and Expressions
 
 ### Arithmetic Operators
 
@@ -496,6 +524,36 @@ For every numerical type, the template functions min<T> and max<T> denote the mi
 For example `min<uint64>` is `0`.
 
 ### take
+
+The `take` operator can be used on expression with a type containing pointers or references to take these pointers away.
+`take` copies the value of its expression, assigns a default value to its expression, and returns the copied value.
+The only expression allowed for take are variables, member access and array/slice access.
+
+```go
+type struct List {
+    next *List
+}
+
+var x *List = ...
+var y = take(x.next)
+```
+
+In the above example, `x.next` is a pointer.
+After `take(x.next)` executed, the value of `x.next` is set to `null`.
+The previous value is assigned to `y` instead.
+Thus, using `take` it is possible to transfer ownership of pointer values.
+
+`take` can be used on variable expressions, but most of the time it can be omitted, resulting in slightly better performance.
+
+```go
+let y *List = take(x)
+let z *List = x
+```
+
+In the case of `y = take(x)` the `null` value is written to `x`.
+In the case if `z = x` the value if `x` is left unchanged, but the compiler does not allow further access to `x`.
+Fyr enforces that there is at most one owning pointer.
+This can be achieved by copying the owning pointer and then assigning zero to the original pointer or by just copying and disallowing access to the original pointer.
 
 ### Operator Precedence
 

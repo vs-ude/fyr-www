@@ -197,7 +197,7 @@ export func main() int {
 ```
 
 The above example uses an array initialization, which is just a shortcut to populate an array.
-It is possible to combine this with the default initialization with `[12, 23, ...]`.
+It is possible to combine this with the default initialization with `[12, 23, ...]`.case "cl
 In this case the first two array elements are initialized with `12` and `23` and all remaining elements are initialized with the default value.
 
 The slice operator `[:]` creates a slice which points to the underlying array and contains all elements of `arr`.
@@ -487,6 +487,17 @@ len("Hello")    // This is 5
 ### copy
 
 ### clone
+
+The `clone` operator creates a copy of a slice and returns a unique slice.
+The slice elements must be pure values, i.e. they must not contain any pointers.
+
+The purpose of `clone` is to gain speed, because internally the compiler can copy the slice in steps of word size, i.e. 8 bytes in one step.
+The same procedure in Fyr would have to copy the slice element by element.
+In the case of a slice of bytes, each step could only copy one byte.
+
+If slice elements contain pointers, just copying the data over is not sufficient.
+The programmer must decide how to treat ownership of the objects pointed to.
+Therefore, the compiler cannot clone such slices.
 
 ### Slice Expressions
 

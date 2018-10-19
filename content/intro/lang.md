@@ -421,10 +421,16 @@ let slice []byte = [65, 66, 67, 68, 0]
 let str = <string>slice 
 ```
 
+Converting a `null` slice results in a `null` string.
+Converting a slice of length zero aborts the program, because the last byte of the slice must be zero.
+
 A slice of bytes or chars can be converted to a string by allocating new memory via `<string>clone(slice)`.
 This is a special case, because the compiler will allocate one additional byte when cloning the slice and set it to zero.
 This allows the following string conversion to succeed.
 In this construction, the slice does not have to end with a zero byte.
+
+Converting a `null` slice results in a `null` string.
+Converting a slice of length zero results in a string of length zero.
 
 #### String to Slice
 
@@ -436,6 +442,8 @@ The last byte of the slice is a zero, because Fyr strings are zero terminated.
 let slice = <[]byte>"Hallo"
 let slice2 = <^[]byte>"Hallo"
 ```
+
+A `null` string results in a `null` slice.
 
 ### Pure Values
 

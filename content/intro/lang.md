@@ -399,6 +399,33 @@ the field `gender` is not explicitly initialized and therefore defaults to `"mal
 
 ### Typecasts
 
+#### Slice to String
+
+A slice of bytes or chars can be converted to a string via `<string>slice`.
+In this case the memory owned by the slice is used for the string.
+The expression of the typecast (`slice` in the above example) will therefore become inaccessible, because this typecast freezes the slice since strings are immutable.
+The last byte of the slice must be zero, otherwise the program aborts, because Fyr strings are always zero terminated.
+
+If the slice start is not equivalent to the start of the underlying array, the conversion moves the data to the beginning of the array.
+This has O(n) complexity as in the following example.
+
+```go
+let slice []byte = [65, 66, 67, 68, 0]
+let str = <string>slice[1:] 
+```
+
+To get O(1) complexity, the slice start must be equivalent with the start of the underlying array, as in the following exampl.e
+
+```go
+let slice []byte = [65, 66, 67, 68, 0]
+let str = <string>slice 
+```
+
+A slice of bytes or chars can be converted to a string by allocating new memory via `<string>clone(slice)`.
+This is a special case, because the compiler will allocate one additional byte when cloning the slice and set it to zero.
+This allows the following string conversion to succeed.
+In this construction, the slice does not have to end with a zero byte.
+
 ### Pure Values
 
 A pure value can be copied byte by byte.

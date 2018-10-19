@@ -426,6 +426,17 @@ This is a special case, because the compiler will allocate one additional byte w
 This allows the following string conversion to succeed.
 In this construction, the slice does not have to end with a zero byte.
 
+#### String to Slice
+
+A string can be casted to a slice or unique slice.
+This copies the slice.
+The last byte of the slice is a zero, because Fyr strings are zero terminated.
+
+```go
+let slice = <[]byte>"Hallo"
+let slice2 = <^[]byte>"Hallo"
+```
+
 ### Pure Values
 
 A pure value can be copied byte by byte.

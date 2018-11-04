@@ -588,6 +588,24 @@ The amount of elements copied is the minimum of the length of both slices.
 
 Because `copy` is a statement, it returns nothing.
 
+### move
+
+The `move` statement is comparable to `copy`.
+But instead of copying the data to a new location, it moves it to a new location.
+The source is filled with zeros afterwards.
+If source and destination overlap, only the part of source not covered by the destination is filled with zeros.
+
+Unlike `copy`, the `move` statement works even for values containing pointers, because no ownership is copied by moving pointers inside an array.
+In addition to filling the source with zeros, the pointers are destructed.
+
+```go
+let s []byte = [1,2,3,4,5]
+// s[1:] is the destination and s is the source
+move(s[1:], s)
+// Prints 0, 1, 2, 3, 4
+println(s[0], s[1], s[2], s[3], s[4])
+```
+
 ### clone
 
 The `clone` operator creates a copy of a slice and returns a unique slice.
@@ -600,6 +618,31 @@ In the case of a slice of bytes, each step could only copy one byte.
 If slice elements contain pointers, just copying the data over is not sufficient.
 The programmer must decide how to treat ownership of the objects pointed to.
 Therefore, the compiler cannot clone such slices.
+
+### slice
+
+The `slice` statement changes a slice.
+A slice is a pointer to an underlying array with a range definition.
+The `slice` statement changes this range definition.
+The resulting range must be covered by the underlying array or the program aborts.
+
+The `slice` statement has three arguments: `slice(s, offset, len)`.
+The first is the slice to change.
+This slice must be mutable.
+The second is an offset relative to the current range start.
+This offset might be negative.
+The third is the new length of the slice.
+
+```go
+let s []byte = [1,2,3,4,5,6]
+var s2 = s[2:]
+slice(s2, -1, 3)
+// Prints 3, 2, 3, 4
+println(len(s2), s2[0], s2[1], s2[2])
+```
+
+In the above example, the slice `s` defines the range `[2:6]`.
+The slice `s2` has the range `[2-1:2-1+3]`, e.g. `[1:4]`, and therefore the length 3 as demanded.
 
 ### Slice Expressions
 

@@ -404,6 +404,7 @@ the field `gender` is not explicitly initialized and therefore defaults to `"mal
 A slice of bytes or chars can be converted to a string via `<string>slice`.
 In this case the memory owned by the slice is used for the string.
 The expression of the typecast (`slice` in the above example) will therefore become inaccessible, because this typecast freezes the slice since strings are immutable.
+A `take` might be required to take ownership of the byte array.
 The last byte of the slice must be zero, otherwise the program aborts, because Fyr strings are always zero terminated.
 
 If the slice start is not equivalent to the start of the underlying array, the conversion moves the data to the beginning of the array.
@@ -414,7 +415,7 @@ let slice []byte = [65, 66, 67, 68, 0]
 let str = <string>slice[1:] 
 ```
 
-To get O(1) complexity, the slice start must be equivalent with the start of the underlying array, as in the following exampl.e
+To get O(1) complexity, the slice start must be equivalent with the start of the underlying array, as in the following example.
 
 ```go
 let slice []byte = [65, 66, 67, 68, 0]
@@ -429,13 +430,19 @@ This is a special case, because the compiler will allocate one additional byte w
 This allows the following string conversion to succeed.
 In this construction, the slice does not have to end with a zero byte.
 
+```go
+// No trailing zero in the slice
+let slice []byte = [65, 66, 67, 68]
+let str = <string>clone(slice) 
+```
+
 Converting a `null` slice results in a `null` string.
 Converting a slice of length zero results in a string of length zero.
 
 #### String to Slice
 
 A string can be casted to a slice or unique slice.
-This copies the slice.
+This copies the slice and returns ownership of the new slice.
 The last byte of the slice is a zero, because Fyr strings are zero terminated.
 
 ```go
@@ -530,7 +537,56 @@ len("Hello")    // This is 5
 
 ### append
 
+The `append` statement appends elements to a slice.
+If the array underlying the slice is not large enough, a new array is allocated, the data copied and the old array released.
+Therefore, `append` can only operate on owning pointers.
+
+The first argument is the slice.
+Append changes the size of this slice.
+Therefore, the slice expression must be mutable.
+All other arguments are appended to the slice.
+
+```go
+var slice = [0, 1, 2, 3]
+append(slice, 4, 5)
+// Prints 6
+println(len(slice))
+```
+
+TODO: Variable parameters 
+
+Because `append` is a statement, it returns nothing.
+
+### push
+
+The `push` statement is similar to `append`.
+The only difference is that the program aborts in case the underlying array is not large enough.
+`push` is potentially faster than `append`, because no code is generated to handle the case that the array is too small.
+
+Furthermore, `push` is available in environments without heap, whereas `append` requires a heap.
+
+### tryPush
+
+The `tryPush` operator is similar to `push`.
+However, it returns a `bool`.
+If the underlying array is too small, `tryPush` returns false.
+Otherwise it returns true.
+
 ### copy
+
+The `copy` statement copies one slice onto another slice.
+Only pure values can be copied.
+The first operator is the destination, followed by the source.
+
+```go
+let slice = [1, 2, 3, 4, 0]
+copy(slice[1:], slice[0:4])
+```
+
+Source and destination may overlap as shown in the example above.
+The amount of elements copied is the minimum of the length of both slices.
+
+Because `copy` is a statement, it returns nothing.
 
 ### clone
 
@@ -663,3 +719,15 @@ In this example the compiler infers that `min<T> < 0` is true if and only if `T`
 ## Advanced Topics
 
 ### Unsafe Pointers
+Fyr supports unsafe pointers, which are comparable to C-pointers.
+They have pointer arithemtics and can be casted freely.
+Consequently, unsafe pointers are as dangerous as C-pointers since the compiler does not provide any checks.
+Idiomatic Fyr code does not use unsafe pointers at all.
+Unsafe pointers are used for low-level programming or when interfacing with C code.
+
+```go
+let ptr #int32 = 0x20
+*ptr = 1
+ptr++
+*ptr = 2
+```

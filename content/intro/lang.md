@@ -553,7 +553,17 @@ append(slice, 4, 5)
 println(len(slice))
 ```
 
-TODO: Variable parameters 
+Slices prefixed with `...` can be used as arguments to `append` as well.
+In this case the slices are appended by copying the slices to the destination slice.
+
+```go
+var s1 []byte = [1, 2, 3]
+let s2 []byte = [4, 5, 6]
+let s3 []byte = [7, 8]
+append(s1, ...s2, ...s3, 9)
+// Prints 9 1 2 3 4 5 6 7 8 9
+println(len(s1), s1[0], s1[1], s1[2], s1[3], s1[4], s1[5], s1[6], s1[7], s1[8])
+```
 
 Because `append` is a statement, it returns nothing.
 

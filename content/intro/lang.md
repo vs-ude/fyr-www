@@ -582,6 +582,20 @@ However, it returns a `bool`.
 If the underlying array is too small, `tryPush` returns false.
 Otherwise it returns true.
 
+### pop
+
+The 'pop' operator returns the last element of a slice.
+
+```go
+let s []byte = [1, 2, 3]
+// Prints 3
+println(pop(s))
+```
+
+The length of the slice is reduced by one.
+Therefore the slice must be mutable.
+If the slice is empty, the program aborts.
+
 ### copy
 
 The `copy` statement copies one slice onto another slice.

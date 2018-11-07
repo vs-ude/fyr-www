@@ -585,6 +585,7 @@ Otherwise it returns true.
 ### pop
 
 The 'pop' operator returns the last element of a slice.
+This last element is filled with the default value, i.e. zeros.
 
 ```go
 let s []byte = [1, 2, 3]
@@ -595,6 +596,10 @@ println(pop(s))
 The length of the slice is reduced by one.
 Therefore the slice must be mutable.
 If the slice is empty, the program aborts.
+
+If the slice contains elements with owning pointers then `pop` returns ownership of the objects being pointed to.
+Thus, `pop` behaves like taking the last element of a slice via `take` and then shrinking the slice via the `slice` operator.
+However, `pop` is faster and more concise.
 
 ### copy
 

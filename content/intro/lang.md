@@ -677,18 +677,18 @@ The slice `s2` has the range `[2-1:2-1+3]`, e.g. `[1:4]`, and therefore the leng
 
 ### Index Expressions
 
-### sizeof
+### sizeOf
 
-The `sizeof` operator returns the number of bytes required for storing a certain type in memory.
+The `sizeOf` operator returns the number of bytes required for storing a certain type in memory.
 The type of the return value is `int`.
 
 ```go
-sizeof<int64>   // This is 8
+sizeOf<int64>   // This is 8
 ```
 
-### alignedSizeof
+### alignedSizeOf
 
-The `alignedSizeof` operator returns the number of bytes required for storing a certain type in an array includeing alignment.
+The `alignedSizeOf` operator returns the number of bytes required for storing a certain type in an array includeing alignment.
 The returned size is always a multiple of the alignment.
 The type of the return value is `int`.
 
@@ -698,8 +698,8 @@ type Odd struct {
     b byte
 }
 
-alignedSizeof<int64>    // This is 8
-alignedSizeof<Odd>      // This is 16, because Odd has a size of 9
+alignedSizeOf<int64>    // This is 8
+alignedSizeOf<Odd>      // This is 16, because Odd has a size of 9
                         // but needs an alignment of 8.
 ```
 

@@ -52,12 +52,12 @@ bool                            // A boolean of 8 bits size that is false or tru
 string                          // Immutable UTF-8 strings
 rune                            // A 32-bit unicode character
 int                             // Platform dependend
-                                // Signed value, usually 32 bits
+                                // Signed value, usually 32 bits even on 64-bit platforms
 uint                            // Platform dependend
-                                // Signed value, usually 32 bits
+                                // Signed value, usually 32 bits even on 64-bit platforms
 ```
 
-WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64` depending on the target platform.
+WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64` depending on the target platform, but the default is `int32`.
 
 The `char` type is required to interface with C functions.
 Idiomatic Fyr code should not use `char` otherwise, since it is a platform-dependent type by definition.
@@ -74,10 +74,10 @@ Explicit casts are required as in the following example:
 
 ```go
 var x int32 = 42
-var y int16 = <int32>x
+var y int16 = <int16>x
 ```
 
-All numeric types including `bool` can be casted into each other.
+All numeric types including `bool` can be explicitly casted into each other.
 
 ### Numeric Literals
 
@@ -100,7 +100,7 @@ To obtain the byte count of a string, call its `len()` member function.
 To access the single unicode characters (of type `rune`) encoded in the UTF-8 string, a `for` loop can be used.
 
 ```go
-func print(let i int, r rune) {
+func print(i int, r rune) {
     ...
 }
 
@@ -157,7 +157,7 @@ An out-of-bound index causes the application to abort.
 
 ```go
 func search(arr [4]int, val int) int {
-    for(var i, v in arr) {
+    for(let i, v in arr) {
         if (v == val) {
             return i
         }
@@ -182,7 +182,7 @@ Therefore, Fyr supports slices, which are essentially pointers to an underlying 
 
 ```go
 func search(arr &[]int, val int) int {
-    for(var i, v in arr) {
+    for(let i, v in arr) {
         if (v == val) {
             return i
         }
@@ -219,7 +219,7 @@ Fyr features pointers and is memory safe, i.e. access to free'd memory areas alw
 
 ```go
 func search(arr []int, val int) int {
-    for(var i, v in arr) {
+    for(let i, v in arr) {
         if (v == val) {
             return i
         }
@@ -242,12 +242,12 @@ let arr []int = [123, 234, 345, 456]
 let arr = [123, 234, 345, 456]
 ```
 
-To allocate a slice of variable size, use the `...` operator:
+To allocate a slice of variable size, use the `make` operator:
 
 ```go
 let a = 100
-let arr []int = [...a]                          // len 100
-let arr2 []int = [123, 234, 345, 456, ...a]     // len 104
+let arr []int = make<int>(100)        // len 100
+let arr2 []int = make<int>(100, 200)  // len 100, cap 200
 ```
 
 The length of an array, string or slice can be obtained with the `len` operator.
@@ -512,6 +512,25 @@ In the case of WebAssembly it could choose to call `console.log`.
 ### Reference Operator
 
 The `&` operator creates a local reference pointer for a some data structure.
+
+### make
+
+The `make` operator creates objects or arrays on the heap.
+
+```go
+let ptr = make<T>()
+```
+
+The above statements creates an object of type `T` on the stack and returns an owning pointer to it.
+
+```go
+let slice = make<T>(100, 200)
+```
+
+The above statement creates an array with elements of type `T` on the stack.
+The array has a size of 200 elements.
+The `make` expression returns a slice with length 100 that points to this array.
+Hence, `cap(slice)` would return 200 and `len(slice)` would return 100.
 
 ### cap
 

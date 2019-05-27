@@ -9,5 +9,5 @@ else
 fi
 
 # printf "Deploying the generated files"
-# rsync -aq public <WWW-SITE-PATH>
+# rsync -aq --delete public <WWW-SITE-PATH>
 # chmod -R ugo+rX,ugo-w <WWW-SITE-PATH>

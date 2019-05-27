@@ -1,0 +1,13 @@
+#!/bin/bash
+
+printf "Building the documentation.\n"
+if which hugo >/dev/null; then
+	hugo
+else
+	printf "The hugo executable was not found. Please make sure it is installed and executable as 'hugo'.\n"
+	exit 1
+fi
+
+# printf "Deploying the generated files"
+# rsync -aq public <WWW-SITE-PATH>
+# chmod -R ugo+rX,ugo-w <WWW-SITE-PATH>

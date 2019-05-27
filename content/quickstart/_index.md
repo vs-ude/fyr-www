@@ -1,7 +1,7 @@
 ---
 title: "Quick Start"
-date: 2017-11-13T21:30:52+01:00
 draft: false
+weight: 1
 ---
 
 The quick start guide shows how to download and install Fyr and how to compile and execute the generated code.

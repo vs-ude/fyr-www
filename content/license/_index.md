@@ -1,6 +1,5 @@
 ---
 title: "License"
-date: 2017-11-13T21:45:04+01:00
 draft: false
 weight: 100
 ---

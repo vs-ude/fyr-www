@@ -14,11 +14,7 @@ If you do not want to generate C-code or WebAssembly, the respective steps and b
 
 ### NodeJS
 
-Install NodeJS version 9.2 or newer.
-
-### Typescript
-
-Install TypeSecipt version 2.8.0 or newer.
+Install NodeJS version 8 or newer.
 
 ### Fyr Compiler
 
@@ -27,8 +23,7 @@ Git is required to download the Fyr sources.
 Clone the Fyr git repository.
 
 {{% notice note %}}
-Fyr is currently being developed on an internal Git.
-Making Fyr available on GitHub is the next milestone.
+We are currently working on providing easily installable packages for multiple supported platforms.
 {{% /notice %}}
 
 ### WebAssembly
@@ -54,9 +49,6 @@ Support for `clang` or `avr-gcc` will follow.
 This step shows how to compiler ot Fyr compiler and how to setup environment variables etc.
 
 ### Build the Fyr Compiler
-
-The Fyr compiler is written in [TypeScript](http://typescriptlang.org).
-Install the latest version and make sure that `tsc` is in your path.
 
 To execute the Fyr compiler, install the latest version of [Node.js](https://nodejs.org/en/).
 Make sure that `node` is in your path.

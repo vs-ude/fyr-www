@@ -4,36 +4,8 @@ draft: false
 weight: 1
 ---
 
-The quick start guide shows how to download and install Fyr and how to compile and execute the generated code.
-
-## Download
-
-The Fyr compiler relies on some external tools.
-This guide shows how to install the Fyr compiler and all tools including a C-compiler and WebAssembly tools.
-If you do not want to generate C-code or WebAssembly, the respective steps and be left out.
-
-### NodeJS
-
-Install NodeJS version 8 or newer.
-
-### Fyr Compiler
-
-Git is required to download the Fyr sources.
-
-Clone the Fyr git repository.
-
-{{% notice note %}}
-We are currently working on providing easily installable packages for multiple supported platforms.
-{{% /notice %}}
-
-### WebAssembly
-
-This step is only required when compiling Fyr to WebAssembly.
-
-The Fyr compiler currently relies on the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt).
-It uses the `wat2wasm` tool to translate `.wat` files into `.wasm` files.
-
-Install the WebAssembly Binary Toolkit and make sure that `wabt` is in your path.
+The quick start guide shows how to use the compiler to generate code and binaries from Fyr code.
+To install the compiler, please follow the instructions in [Installation](installation).
 
 ### C Compiler
 
@@ -44,63 +16,27 @@ By default, Fyr uses `gcc`, which must be installed.
 Support for `clang` or `avr-gcc` will follow.
 {{% /notice %}}
 
-## Install
-
-This step shows how to compiler ot Fyr compiler and how to setup environment variables etc.
-
-### Build the Fyr Compiler
-
-To execute the Fyr compiler, install the latest version of [Node.js](https://nodejs.org/en/).
-Make sure that `node` is in your path.
-
-Fyr uses [NPM](https://www.npmjs.com/package/npm) to download required packages. Make sure that `npm` is in your path.
-
-To download all dependencies, go to the `fyr` directory and execute:
-
-```bash
-npm install
-```
-
-To build the software (output is written to `/lib`), execute:
-
-```bash
-npm run build
-```
-
-Running `npm run build:parser` will only generate fresh JavaScript from the `parser.pegjs` parser definition.
-Running `npm run build:lib` re-compiles the minimal native Fyr runtime.
-
-### Determine the Architecture
-
-Fyr is designed for cross compilation.
-Therefore, paths to object files or executables have a architecture-specific subdirectory.
-Use the `fyrarch` command to get the default architecture.
-In the following we refer to `<architecture>` which must be set to the output of `fyrarch` unless cross compiling for another architecture.
-
-### Setup Environment Variables
-
-Now set the path to the fyr installation directory like this:
-
-```bash
-export FYRBASE=/your/path/to/fyr
-```
-
-Fyr will use this path to find its library files.
-
-Add the directory `$FYRBASE/bin` to your path so that `fyrc` and `runwasm` are in your path.
-The directory `$FYRBASE/src` contains packages of the Fyr standard library.
-
-Set `$FYRPATH` to a directry that contains your personal sources in `$FYRPATH/src`.
-If `$FYRPATH` is not set, it defaults to `$HOME/fyr`.
-Optionally `$FYRPATH` can contain multiple pathes separated by colon.
-Make sure to put `$FYRPATH/bin/<architecture>` in your path, because this is the location where the compiled programs are put.
-
 ## Compile and Run
 
-This step shows how to run the compiler.
-Use `fyrc` to compile `.fyr` files and build executables.
+The package comes with the _fyrc_ binary, which can be used to compile Fyr code into C or binary executables.  
 
-### Compiling C-Code
+### Native Binaries
+
+A simple _hello\_world.fyr_ looks like this:
+
+```
+export func main() int {
+    println("Hello World")
+    return 0
+}
+```
+
+It can be compiled with `fyrc -n hello_world.fyr`.
+The generated executable is _hello\_world_ and yields `Hello World` when run.
+
+More examples can be found in the _src/_ folder of the repository.
+
+### Compiling to C-Code
 
 The following example compiles a fyr source file into a C file.
 The flag `-c` selects C as a compiler backend.
@@ -115,49 +51,16 @@ Furthermore, the C-files are compiled and linked resuting in `example`.
 To compile a package (i.e. all `.fyr` files in a directory`, go to the sources directory of the package and run
 
 ```bash
-fyrc -c .
+fyrc -n .
 ```
 
 If the package is in the sources path of `$FYRBASE` or `$FYRPATH`, the object files are put to `pkg/<architecture>` in the respective path, and executables are put to `bin/<architecture>`.
 This is preferable, since it does not clutter the source files with generated files.
 
-### Compiling WebAssembly Code
+### Environment Variables
 
-The same as compiling C-code, just use the `-w` option instead of `-c`, e.g.
+You may set `$FYRPATH` to a directry that contains your personal sources in `$FYRPATH/src`.
+The compiler will use it to search for additional packages referenced in your code.
 
-```bash
-fyrc -w .
-```
-
-### Running WebAssembly Code
-
-Some examples come with an HTML page.
-Make it available for example with `python -m SimpleHTTPServer 8000` and open the HTML page.
-It will load the WASM code and execute it.
-
-Other examples are made to run in Node.js.
-Use the `runwasm` tool to execute WASM in Node.js as follows:
-
-```bash
-runwasm mandelbrot.wasm main
-```
-
-Here `main` is the function to execute.
-Make sure that this function is exported like this:
-
-```go
-export func main() {
-    ...
-}
-```
-
-If the function returns a value, it is displayed on the console.
-
-For benchmarking execute 
-
-```bash
-time runwasm mandelbrot.wasm main
-```
-
-The performance overhead of launching node is around 100ms on a modern machine.
-Hence, benchmarks must run significantly longer to produce meaningful results.
+If `$FYRPATH` is not set, it defaults to `$HOME/fyr`.
+Optionally `$FYRPATH` can contain multiple paths separated by colons.

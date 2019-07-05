@@ -35,6 +35,6 @@ home = [ "HTML", "RSS", "JSON"]
   themeVariant = "red"
 
 [[menu.shortcuts]] 
-name = "<i class='fa fa-github'></i> Github repo"
+name = "<i class='fab fa-github'></i> Github repo"
 url = "https://github.com/vs-ude/fyr"
 weight = 10

@@ -15,7 +15,7 @@ Writing templates for numerical types poses a challenge, because some types do n
 Thus, the following example will not compile for unsigned types, because `-i` is not allowed:
 
 ```go
-func dummy<T>(T i) {
+func dummy<T>(i T) {
     i = -i
 }
 ```
@@ -23,7 +23,7 @@ func dummy<T>(T i) {
 However, the following example compiles for unsigned types:
 
 ```go
-func itoa<T>(T i) {
+func itoa<T>(i T) {
     if (i < 0) {
         i = -i
     }

@@ -4,6 +4,10 @@ draft: false
 weight: 10
 ---
 
+{{% notice note %}}
+We are currently in the process of rewriting the compiler using _Go_. Some features will change and the syntax will slightly change as a result.
+{{% /notice %}}
+
 Here is the obligatory hello world in Fyr.
 
 ```go

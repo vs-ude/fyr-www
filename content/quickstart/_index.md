@@ -46,7 +46,7 @@ fyrc -c example.fyr
 ```
 
 The output of the above command is `example.c` in the same directory.
-Furthermore, the C-files are compiled and linked resuting in `example`.
+Furthermore, the C-files are compiled and linked resulting in `example`.
 
 To compile a package (i.e. all `.fyr` files in a directory`, go to the sources directory of the package and run
 
@@ -59,7 +59,7 @@ This is preferable, since it does not clutter the source files with generated fi
 
 ### Environment Variables
 
-You may set `$FYRPATH` to a directry that contains your personal sources in `$FYRPATH/src`.
+You may set `$FYRPATH` to a directory that contains your personal sources in `$FYRPATH/src`.
 The compiler will use it to search for additional packages referenced in your code.
 
 If `$FYRPATH` is not set, it defaults to `$HOME/fyr`.

@@ -28,7 +28,7 @@ As a consequence, C code can run on almost any hardware, ranging from PCs, to GP
 The drawback of C (and C++) is that the language is neither memory safe nor thread safe.
 Especially for modern IoT applications this increases the risk of bugs and security vulnerabilities.
 
-Fyr is desgined as a safe replacement of C.
+Fyr is designed as a safe replacement of C.
 However, replacing C entirely is a very long term goal.
 In the meantime, Fyr can be easily combined with existing C sources, because Fyr can compile to C code.
 If some hardware can run C then it can run Fyr as well.
@@ -54,7 +54,7 @@ We are currently in the process of rewriting the compiler using _Go_. Implementa
 
 Fyr is a **research project** of the [_Distributed Systems_](http://www.vs.uni-due.de) research group at the [_University Duisburg Essen_](http://www.uni-due.de).
 Fyr is still in alpha status.
-The Fyr compiler for C99 is working, although not all planned features are imlemented yet.
+The Fyr compiler for C99 is working, although not all planned features are implemented yet.
 The WebAssembly backend is working for a subset of the language, but requires some more work.
 
 Some initial benchmarks indicate that Fyr in WebAssembly executes faster than JavaScript or even C (when compiled to WebAssembly) in the browser.

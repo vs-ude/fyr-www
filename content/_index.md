@@ -48,6 +48,10 @@ The goal of Fyr is to produce **small binaries** (comparable to JavaScript), **e
 
 ## Project Status
 
+{{% notice note %}}
+We are currently in the process of rewriting the compiler using _Go_. Implementation of new features is halted until we reach feature parity with the old implementation.
+{{% /notice %}}
+
 Fyr is a **research project** of the [_Distributed Systems_](http://www.vs.uni-due.de) research group at the [_University Duisburg Essen_](http://www.uni-due.de).
 Fyr is still in alpha status.
 The Fyr compiler for C99 is working, although not all planned features are imlemented yet.

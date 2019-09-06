@@ -21,7 +21,7 @@ The syntax of Fyr is mainly inspired by _GO_, and in selected places by _TypeScr
 
 ```go
 func compute() int {
-    var a = 21*2
+    var a := 21*2
     return a
 }
 ```

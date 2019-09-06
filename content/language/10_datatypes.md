@@ -11,18 +11,18 @@ Fyr supports the following data types:
 uint8, uint16, uint32, uint64   // Unsigned integers of fixed size
 int8, int16, int32, int64       // Signed integers of fixed size
 float, double                   // 32bit and 64bit floating point numbers
-byte                            // Platform dependend
+byte                            // Platform dependant
                                 // Smallest addressable unsigned unit
                                 // Usually 8 bits
-char                            // Platform dependend
+char                            // Platform dependant
                                 // Smallest addressable signed unit
                                 // Usually 8 bits
 bool                            // A boolean of 8 bits size that is false or true
 string                          // Immutable UTF-8 strings
 rune                            // A 32-bit unicode character
-int                             // Platform dependend
+int                             // Platform dependant
                                 // Signed value, usually 32 bits even on 64-bit platforms
-uint                            // Platform dependend
+uint                            // Platform dependant
                                 // Signed value, usually 32 bits even on 64-bit platforms
 ```
 

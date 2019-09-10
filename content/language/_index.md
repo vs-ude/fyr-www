@@ -4,16 +4,11 @@ draft: false
 weight: 10
 ---
 
-{{% notice note %}}
-We are currently in the process of rewriting the compiler using _Go_. Some features will change and the syntax will slightly change as a result.
-{{% /notice %}}
-
 Here is the obligatory hello world in Fyr.
 
 ```go
-export func main() int {
+func Main() {
     println("Hello World")
-    return 0
 }
 ```
 
@@ -21,7 +16,7 @@ The syntax of Fyr is mainly inspired by _GO_, and in selected places by _TypeScr
 
 ```go
 func compute() int {
-    var a := 21*2
+    a := 21*2
     return a
 }
 ```

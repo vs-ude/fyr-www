@@ -233,11 +233,11 @@ Using the `is` keyword, we can test the type of value being stored in the Or-Typ
 
 ```go
 var v string | bool = false
-if (v is bool) {
+if v is bool {
     ...
 }
 v = "Hello"
-if (v is string) {
+if v is string {
     ...
 }
 ```
@@ -247,53 +247,35 @@ If the Or-Type stores a different value, the program will panic.
 
 ```go
 var v string | bool = "Joe"
-var name = <string>v
+var name = `string(v)
 ```
 
 Or types can be used together with symbols to construct enumerations.
 For example, we can define a type to store a person's gender.
 
 ```go
-type Gender "male" | "female" | string
-var g Gender = "male"
-if (g is "male") {
-    ...
-}
-g = "female"
-if (g == "female") {
+type Gender $male | $female | string
+var g Gender = $male
+if g is $male {
     ...
 }
 g = "complicated"
-if (g is string) {
+if g is string {
     ...
 }
 ```
 
-In the above example `"male"` is a symbol type.
-Note that is denotes a type and not a string value.
-A symbol is a type that has only one possible value: a string literal of its own name, e.g. `"male"` in the above example.
-Internally, a symbol is not necessarily stored as a string.
-The compiler may opt to enumerate the symbols and store a number instead.
-
-Assigning a string value (not string literal!) to the `Gender` type, sets `g's` value to a string type, no matter what the content of the string.
-
-```go
-type Gender "male" | "female" | string
-var s = "male"                      // The type of s is now string
-var g Gender = s                    // The type stored in g is now a string
-if (g is string) {                  // True
-    ...
-}
-if (g is "male") {                  // False
-    ...
-}
-```
+In the above example `$male` is a symbol type.
+A symbol is a type that has only one possible value: itself, e.g. `$male` in the above example.
+Internally, a symbol is just a number.
+A symbol `$Male` defined in one package will always be equivalent to a symbol of the same name defined in any other package.
+Symbols with a lower-case first letter are not exported, as is the case for all types. 
 
 The default value of an Or-Type is the default value of its first type option.
 In the case of 
 
 ```go
-type Gender "male" | "female" | string
+type Gender $male | $female | string
 
 type Person struct {
     name   string
@@ -303,7 +285,7 @@ type Person struct {
 var p Person = {name: "Joe"}
 ```
 
-the field `gender` is not explicitly initialized and therefore defaults to `"male"`, because the symbol type `"male"` is the first type option on `Gender` and `"male"` is the default value of this symbol type.
+the field `gender` is not explicitly initialized and therefore defaults to `$male`, because the symbol type `$male` is the first type option on `Gender` and `$male` is the default value of this symbol type.
 
 ## Struct Type
 

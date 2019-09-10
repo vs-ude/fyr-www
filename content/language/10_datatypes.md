@@ -10,7 +10,7 @@ Fyr supports the following data types:
 ```go
 uint8, uint16, uint32, uint64   // Unsigned integers of fixed size
 int8, int16, int32, int64       // Signed integers of fixed size
-float, double                   // 32bit and 64bit floating point numbers
+float32, float64                // 32bit and 64bit floating point numbers
 byte                            // Platform dependant
                                 // Smallest addressable unsigned unit
                                 // Usually 8 bits
@@ -26,24 +26,19 @@ uint                            // Platform dependant
                                 // Signed value, usually 32 bits even on 64-bit platforms
 ```
 
-WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64` depending on the target platform, but the default is `int32`.
+WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64` depending on the target platform, but the default is `int64` on the PC.
 
 The `char` type is required to interface with C functions.
 Idiomatic Fyr code should not use `char` otherwise, since it is a platform-dependent type by definition.
 
-{{% notice note %}}
-The types `float` and `double` might be renamed to `float32` and `float64` in a future version of the language.
-{{% /notice %}}
-
 All data types have a default value of 0.
-If a value is not explicitly initialized, Fyr ensures that it is initialized with zeros.
 
 Fyr does not perform any implicit type conversion.
 Explicit casts are required as in the following example:
 
 ```go
 var x int32 = 42
-var y int16 = <int16>x
+var y int16 = `int16(x)
 ```
 
 All numeric types including `bool` can be explicitly casted into each other.
@@ -52,9 +47,22 @@ All numeric types including `bool` can be explicitly casted into each other.
 
 Boolean literals are `true` and `false`.
 
-Integer literals are either written as decimals as in `1234` or in hexadecimal as in `0xffef`.
+Integer literals are either written as decimals as in `1234` or in hexadecimal as in `0xffef` or octal as in `0666`.
 
 Floating point literal are of the form `12.34` or `.34`.
+
+Fyr supportts numeric literals which are larger than 64bit.
+
+```go
+// This works
+var x uint64 = 1<<64 - 1
+// This fails
+var y uint8 = 1<<8
+```
+
+In the above example `1<<64` is larger than uint64.
+This is ok, because the compiler evaluates `1<<64 -1`, determines that it fits into 64 bit and therefore generated no error.
+The value `1<<8` is too large for uint8, therefore the compiler will report an error.
 
 ## Strings and Runes
 
@@ -73,12 +81,12 @@ func print(i int, r rune) {
     ...
 }
 
-export func main() int {
+func Main() {
     var str = "Übung"
-    for(let i, r in str) {
+    for i, r := range str {
         print(i, r)         // Loops 5 times
     }
-    return str.len()        // Returns 6
+    println(str.len())      // Prints 6
 }
 ```
 
@@ -109,8 +117,8 @@ Runes can be used inside a string as well as in `"\xdcbung"` which is equivalent
 Strings can be coverted to `[]byte` and the other way round as in the following example:
 
 ```go
-var arr []byte = <[]byte>"Hallo"
-var str string = <string>arr
+var arr []byte = `[]byte("Hallo")
+var str string = `string(arr)
 ```
 
 Note that this conversion implies a copy because strings are immutable and slices are not.
@@ -126,47 +134,47 @@ An out-of-bound index causes the application to abort.
 
 ```go
 func search(arr [4]int, val int) int {
-    for(let i, v in arr) {
-        if (v == val) {
+    for i, v := range arr {
+        if v == val {
             return i
         }
     }
     return 0
 }
 
-export func main() int {
-    var arr [4]int = [...]
+func Main() {
+    var arr [4]int = []
     arr[0] = 123
     arr[1] = 234
-    return search(arr, 234)
+    println(search(arr, 234))
 }
 ```
 
 Note that variables need explicit initialization before the variable can be used.
-The initialization expression `[...]` initializes an array or slice with its default value, which is zero in this case.
+The initialization expression `[]` initializes an array or slice with its default value, which is zero in this case.
 
 In the above example, the array is copied when `search` is called.
 This is inefficient, and the search function works only for arrays of a fixed size.
 Therefore, Fyr supports slices, which are essentially pointers to an underlying array.
 
 ```go
-func search(arr &[]int, val int) int {
-    for(let i, v in arr) {
-        if (v == val) {
+func search(arr []int, val int) int {
+    for i, v := range arr {
+        if v == val {
             return i
         }
     }
     return 0
 }
 
-export func main() int {
+func Main() {
     var arr [4]int = [123, 234, 345, 456]
-    return search(arr[:], 234)
+    println(search(arr[:], 234))
 }
 ```
 
 The above example uses an array initialization, which is just a shortcut to populate an array.
-It is possible to combine this with the default initialization with `[12, 23, ...]`.case "cl
+It is possible to combine this with the default initialization with `[12, 23, ...]`.
 In this case the first two array elements are initialized with `12` and `23` and all remaining elements are initialized with the default value.
 
 The slice operator `[:]` creates a slice which points to the underlying array and contains all elements of `arr`.
@@ -179,26 +187,12 @@ A slice is denoted for example as `[]int`.
 Note that slices are pointers to an array.
 Assigning one slice to another just assigns this internal pointer, but the array is not copied.
 
-However, in this example the search function accepts a local reference slice of type `&[]int`.
-When a function accepts a local reference type as a parameter, the compiler verifies that the function will not store any pointers to this data that live longer than the function invocation.
-This allows `main` to hand out a slice to an array which is on the stack, because Fyr can verify that no pointers to `arr` live longer than the stack frame in which `arr` is stored.
-
-If `search` accepts `[]int` instead, `main` must allocate the array on the heap, because otherwise Fyr cannot ensure that there are no dangling pointers to the array after main returns.
-Fyr features pointers and is memory safe, i.e. access to free'd memory areas always causes an abort.
+The following example does almost the same, except that `arr` is stored on the heap.
 
 ```go
-func search(arr []int, val int) int {
-    for(let i, v in arr) {
-        if (v == val) {
-            return i
-        }
-    }
-    return 0
-}
-
-export func main() int {
+func Main() {
     let arr []int = [123, 234, 345, 456]
-    return search(arr, 234)
+    println(search(arr, 234))
 }
 ```
 
@@ -211,12 +205,12 @@ let arr []int = [123, 234, 345, 456]
 let arr = [123, 234, 345, 456]
 ```
 
-To allocate a slice of variable size, use the `make` operator:
+To allocate a slice of variable size, use the `new` operator:
 
 ```go
 let a = 100
-let arr []int = make<int>(100)        // len 100
-let arr2 []int = make<int>(100, 200)  // len 100, cap 200
+let arr []int = new []int(100)        // len 100
+let arr2 []int = new []int(100, 200)  // len 100, cap 200
 ```
 
 The length of an array, string or slice can be obtained with the `len` operator.

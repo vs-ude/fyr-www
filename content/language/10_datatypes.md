@@ -219,53 +219,6 @@ The elements of a slice can be copied using the `clone` operator.
 It returns a slice which points to the cloned array.
 The `append` operator can append to a slice, while `copy` allows copying elements between slices.
 
-## Tuple Type
-
-A tuple type is an anonymous struct.
-
-```go
-var result (string, bool) = (null, false)
-```
-
-In the above example `(string, bool)` is a tuple type.
-The expression `(null, false)` is a literal that is assignable to a tuple.
-
-The main use case of tuples is complex return values.
-
-```go
-func lookup(name string) (string, bool) {
-    ...
-}
-``` 
-
-The above function returns a tuple and could thus be assigned to the `result` variable.
-
-```go
-result = lookup("foobar")
-```
-
-Furthermore, tuples returned by a function can be decomposed upon assignment.
-
-```go
-id, ok = lookup("foobar")
-```
-
-Tuples can be used in other cases as well, but structs are often easier to use.
-The advantage of tuples is that they are anonymous.
-If every function returning a tuple uses a struct instead, the code would be cluttered with structs.
-
-```go
-type lookupResult struct {
-    id string
-    ok bool
-}
-
-func lookup(name string) lookupResult {
-}
-```
-
-In the above case tuples are easier to use.
-
 ## Or-Type and Symbols
 
 An Or-Type is a union of types with a discriminator.

@@ -187,7 +187,7 @@ A slice is denoted for example as `[]int`.
 Note that slices are pointers to an array.
 Assigning one slice to another just assigns this internal pointer, but the array is not copied.
 
-The following example does almost the same, except that `arr` is stored on the heap.
+The following example does almost the same as the one above, except that `arr` is stored on the heap.
 
 ```go
 func Main() {
@@ -196,7 +196,7 @@ func Main() {
 }
 ```
 
-In the above example, `[123, 234, 345, 456]` allocates the array on the heap and returns a slice to it.
+In this example, `[123, 234, 345, 456]` allocates the array on the heap and returns a slice to it.
 Hence, `arr` is now a slice type.
 Due to type inference, the following two statements are equivalent:
 
@@ -299,7 +299,7 @@ the field `gender` is not explicitly initialized and therefore defaults to `$mal
 
 ### Slice to String
 
-A slice of bytes or chars can be converted to a string via `<string>slice`.
+A slice of bytes or chars can be converted to a string via ``\`string(slice)``.
 In this case the memory owned by the slice is used for the string.
 The expression of the typecast (`slice` in the above example) will therefore become inaccessible, because this typecast freezes the slice since strings are immutable.
 A `take` might be required to take ownership of the byte array.
@@ -341,20 +341,28 @@ Converting a slice of length zero results in a string of length zero.
 
 A string can be casted to a slice or unique slice.
 This copies the slice and returns ownership of the new slice.
-The last byte of the slice is a zero, because Fyr strings are zero terminated.
 
 ```go
-let slice = <[]byte>"Hallo"
-let slice2 = <^[]byte>"Hallo"
+let slice = `[]byte("Hallo")
 ```
 
 A `null` string results in a `null` slice.
 
 ## Pure Values
 
-A pure value can be copied byte by byte.
-This is true for for all data-types except pointer-like types.
-Unsafe pointers are pure values, however.
-Pointer-like types can either not be copied, because copying could result in an object having multiple owning pointers, or an object is not destructed when its pointer is overwritten, or reference-counting does not happen correctly in case of reference pointers.
+A pure value is a data structure that has no pointers.
+Unsafe pointers are considered pure values as well.
 
-When using the `copy` or `clone` operators, only pure values can be copied or cloned.
+## Copying
+
+A pure value can be copied byte by byte.
+Data types that can not be copied include data types which point to an isolated group.
+By definition, only one pointer must exist that points inside this group.
+Therefore, copying is not allowed.
+The same applies to pointers to immutable objects, because these required atomic reference counting.
+Just copying those pointers would break reference counting.
+
+These copying restrictions are important for the operators `copy` or `clone` as well as for by-value assignment or when passing an argument by-value to a function.
+
+Use `take` to take a data structure from one place and put it somewhere else.
+`take` is not subject to the aforementioned copying rules, because it does not create a copy.

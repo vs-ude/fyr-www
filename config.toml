@@ -36,5 +36,5 @@ home = [ "HTML", "RSS", "JSON"]
 
 [[menu.shortcuts]] 
 name = "<i class='fab fa-github'></i> Github repo"
-url = "https://github.com/vs-ude/fyr"
+url = "https://github.com/vs-ude/fyrlang"
 weight = 10

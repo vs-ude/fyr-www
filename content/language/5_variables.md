@@ -15,8 +15,6 @@ y = inc(y)
 
 ## Assignment
 
-TODO: `let`, `var`, single/multiple assignment
-
 As you can see above, Fyr offers the _walrus operator_ (`:=`).
 On the left of the operator, there must be at least one variable that has not yet been declared.
 In the example above, `x` has been declared already, but `y` has not.

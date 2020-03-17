@@ -5,31 +5,29 @@ draft: false
 weight: 10
 ---
 
-Fyr supports the following data types:
+Fyr supports the following basic data types:
 
 ```go
 uint8, uint16, uint32, uint64   // Unsigned integers of fixed size
 int8, int16, int32, int64       // Signed integers of fixed size
 float32, float64                // 32bit and 64bit floating point numbers
-byte                            // Platform dependant
+byte                            // Platform dependent
                                 // Smallest addressable unsigned unit
-                                // Usually 8 bits
-char                            // Platform dependant
-                                // Smallest addressable signed unit
                                 // Usually 8 bits
 bool                            // A boolean of 8 bits size that is false or true
 string                          // Immutable UTF-8 strings
 rune                            // A 32-bit unicode character
-int                             // Platform dependant
+int                             // Platform dependent
                                 // Signed value, usually 32 bits even on 64-bit platforms
-uint                            // Platform dependant
+uint                            // Platform dependent
                                 // Signed value, usually 32 bits even on 64-bit platforms
+uintptr                         // Platform dependent
+                                // Unsigned value large enough to store a pointer in it.
 ```
 
-WebAssembly uses a 32-bit address space by default, hence Fyr treats `int` as an alias for `int32` in WebAssembly. On Arduinos, `int` is an alias for `int16`. When compiling for other targets than WebAssembly MVP, `int` can be an alias for `int16` or `int32` or `int64` depending on the target platform, but the default is `int64` on the PC.
-
-The `char` type is required to interface with C functions.
-Idiomatic Fyr code should not use `char` otherwise, since it is a platform-dependent type by definition.
+Many C-systems use 32-bit ints with a 64-bit address space by default.
+Fyr treats `int` as an alias for C's `int`. On Arduinos, `int` is an alias for `int16`.
+When compiling for other targets, the size of `int` can vary.
 
 All data types have a default value of 0.
 
@@ -60,8 +58,8 @@ var x uint64 = 1<<64 - 1
 var y uint8 = 1<<8
 ```
 
-In the above example `1<<64` is larger than uint64.
-This is ok, because the compiler evaluates `1<<64 -1`, determines that it fits into 64 bit and therefore generated no error.
+In the above example `1<<64` is larger than `uint64`.
+This is ok, because the compiler evaluates `1<<64 -1`, determines that the result fits into 64 bit and therefore generated no error.
 The value `1<<8` is too large for uint8, therefore the compiler will report an error.
 
 ## Strings and Runes
@@ -84,13 +82,13 @@ func print(i int, r rune) {
 func Main() {
     var str = "Übung"
     for i, r := range str {
-        print(i, r)         // Loops 5 times
+        println(i, r)         // Loops 5 times
     }
-    println(str.len())      // Prints 6
+    println(len(str))      // Prints 6
 }
 ```
 
-The above example would call `print` 5 times although the string is 6 bytes long.
+The above example would call `println` 5 times although the string is 6 bytes long.
 The first two bytes together represent the rune `'Ü'`.
 
 There are several ways of denoting runes:
@@ -221,6 +219,11 @@ The `append` operator can append to a slice, while `copy` allows copying element
 
 ## Or-Type and Symbols
 
+{{% notice note %}}
+Or-types and symbols have been supported by the first version of Fyr.
+The new compiler does not support it yet.
+{{% /notice %}}
+
 An Or-Type is a union of types with a discriminator.
 A value of an Or-Type must match one of these types and the discriminator stores which type that is.
 
@@ -310,14 +313,14 @@ This has O(n) complexity as in the following example.
 
 ```go
 let slice []byte = [65, 66, 67, 68, 0]
-let str = <string>slice[1:] 
+let str = `string(slice[1:])
 ```
 
 To get O(1) complexity, the slice start must be equivalent with the start of the underlying array, as in the following example.
 
 ```go
 let slice []byte = [65, 66, 67, 68, 0]
-let str = <string>slice 
+let str = `string(slice)
 ```
 
 Converting a `null` slice results in a `null` string.
@@ -331,7 +334,7 @@ In this construction, the slice does not have to end with a zero byte.
 ```go
 // No trailing zero in the slice
 let slice []byte = [65, 66, 67, 68]
-let str = <string>clone(slice) 
+let str = `string(clone(slice))
 ```
 
 Converting a `null` slice results in a `null` string.

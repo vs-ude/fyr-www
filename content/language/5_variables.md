@@ -39,7 +39,7 @@ It is an error if the left side features only variables that have been declared 
 
 ## Mutability
 
-Variables declared with `var` or `:=` are mutable, that means there value might be changed.
+Variables declared with `var` or `:=` are mutable, that means their value might be changed.
 Constants defined with `let` are immutable.
 
 This will not work:
@@ -50,7 +50,7 @@ x = 6
 ```
 
 The difference between `let` and `var` is only important for the values stored in these variables or constants.
-It has no impact on the mutability of object referenced via pointers.
+It has no impact on the mutability of objects referenced via pointers.
 
 Pointer types defined in Fyr are immutable by default.
 This is done to prevent accidental modification of values.
@@ -78,4 +78,4 @@ let ptr2 mut *int = new int(2)
 
 In the above example `ptr2` is a constant, i.e. it will always point to the same location in memory.
 However, the location it is pointing to is marked as mutable.
-Therefore `ptr2` can not be assigned to, but the location it is pointing to can be dereferenced and assigned.
+Therefore `ptr2` cannot be assigned to, but the location it is pointing to can be dereferenced and assigned.

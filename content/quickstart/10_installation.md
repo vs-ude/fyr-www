@@ -74,21 +74,6 @@ Once you have [Homebrew](https://brew.sh/) installed, installing fyr is as easy 
 The _fyrc_ binary will be linked into your Homebrew path.
 
 
-### via NPM
-
-{{% notice note %}}
-We are currently in the process of rewriting the compiler using _Go_. The npm package will be removed once this reaches feature parity with the previous implementation.
-{{% /notice %}}
-
-An _npm_ package is available in the standard npm [registry](https://www.npmjs.com/package/fyrlang).
-It can be installed in a project with a simple `npm i fyrlang`.
-
-{{% notice info %}}
-Please be aware that this will not install the _fyrc_ binary in a place covered by your PATH.
-You will have to link it there yourself.
-{{% /notice %}}
-
-
 ## From Source
 
 Simply clone [the repository](https://github.com/vs-ude/fyrlang) and run `make`.

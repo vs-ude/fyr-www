@@ -9,6 +9,11 @@ The compiler currently only supports UNIX-like systems, Windows support is plann
 
 ## As Native Package
 
+{{% notice note %}}
+We are currently in the process of rewriting the compiler using _Go_.
+The package provided here are based on the old version.
+Currently, latest Fyr must be cloned from GitHub and compiled.
+{{% /notice %}}
 
 ### Linux
 
@@ -86,13 +91,14 @@ You will have to link it there yourself.
 
 ## From Source
 
-{{% notice note %}}
-We are currently in the process of rewriting the compiler using _Go_. The requirements and process for source installation will change significantly.
-{{% /notice %}}
+Simply clone [the repository](https://github.com/vs-ude/fyrlang) and run `make`.
+The _fyrc_ executable can be found in the same directory.
 
-Simply clone [the repository](https://github.com/vs-ude/fyr) and run `npm install && npm run build`.
-Working _node_, _npm_, and _gcc_ executables are required, everything else will be installed by _npm_.  
-The _fyrc_ executable can be found in _bin/_.
+Now set the environment variables in the cloned directory like this:
 
-The install script also registers a git hook that will automatically rebuild the compiler after git pulls if necessary.
+```
+export FYRBASE=`pwd`
+export PATH=$PATH:$FYRBASE
+```
 
+To test your installation run `make test`.

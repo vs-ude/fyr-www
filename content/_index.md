@@ -49,6 +49,7 @@ The goal of Fyr is to produce **small binaries** (comparable to C/C++), **effici
 
 {{% notice note %}}
 We are currently in the process of rewriting the compiler using _Go_. 
+The documentation of the previous TypeScript based version can be found in the [legacy branch](http://fyr.vs.uni-due.de/legacy).
 {{% /notice %}}
 
 Fyr is a **research project** of the [_Distributed Systems_](http://www.vs.uni-due.de) research group at the [_University Duisburg Essen_](http://www.uni-due.de).
